@@ -9,6 +9,25 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+      fontFamily: {
+        'noto': ['var(--font-noto-sans)', 'Noto Sans', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+      },
+      fontSize: {
+        'hero': ['3.5rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
+        'hero-lg': ['4rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
+        'hero-xl': ['4.5rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
+        'display': ['2.5rem', { lineHeight: '1.2', letterSpacing: '-0.01em' }],
+        'display-lg': ['3rem', { lineHeight: '1.2', letterSpacing: '-0.01em' }],
+        'body-lg': ['1.125rem', { lineHeight: '1.7' }],
+        'body-xl': ['1.25rem', { lineHeight: '1.6' }],
+      },
+      fontWeight: {
+        'light': '300',
+        'normal': '400',
+        'medium': '500',
+        'semibold': '600',
+        'bold': '700',
+      },
   		backgroundImage: {
   			'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
   			'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',

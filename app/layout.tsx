@@ -1,22 +1,19 @@
-import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Noto_Sans } from "next/font/google";
 import "./globals.css";
 
-const playfair = Playfair_Display({ 
+const notoSans = Noto_Sans({ 
   subsets: ['latin'],
   display: 'swap',
-  weight: ['400', '500'],
-  style: ['normal'],
-})
-
-const inter = Inter({ 
-  subsets: ['latin'],
-  display: 'swap',
+  weight: ['300', '400', '500', '600', '700'],
+  fallback: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+  preload: true,
+  variable: '--font-noto-sans',
 })
 
 export const metadata: Metadata = {
-  title: "vibedev.ai",
-  description: "Experience the new way of coding with vibedev.ai. Transform your development workflow and vibe with your code like never before.",
+  title: "Mira Labs - AI Insight Engine for GTM Teams",
+  description: "Turn sales calls into product intelligence. Automatically analyze Gong calls, CRM data, and sales notes to surface customer pain points, objections, and feature requests.",
   icons: {
     icon: [
       {
@@ -46,10 +43,11 @@ export const metadata: Metadata = {
     ],
   },
   manifest: "/manifest.json",
-  viewport: {
-    width: 'device-width',
-    initialScale: 1
-  }
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1
 };
 
 export default function RootLayout({
@@ -58,14 +56,14 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className={notoSans.variable}>
       <head>
         <link rel="icon" type="image/png" sizes="32x32" href="/images/idevibelogo.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/images/idevibelogo.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/images/idevibelogo.png" />
         <link rel="manifest" href="/manifest.json" />
       </head>
-      <body className={`${inter.className} bg-black bg-dotted-grid`}>{children}</body>
+      <body className={`${notoSans.className} bg-white antialiased`}>{children}</body>
     </html>
   );
 }
