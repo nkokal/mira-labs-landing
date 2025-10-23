@@ -692,27 +692,51 @@ export default function Page() {
                       Get in touch
                     </button>
                   </div>
+                </div>
 
-                  {/* Feature Badges */}
-                  <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-6 text-sm text-[#64748B]">
-                    <div className="flex items-center gap-1.5">
-                      <svg className="w-4 h-4 text-[#22C55E]" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      <span className="font-medium">AI-Powered Analysis</span>
+                {/* Feature Highlights - Full Width */}
+                <div className="w-full max-w-[1400px] mx-auto px-8 lg:px-12" style={{ marginTop: '80px', marginBottom: '60px' }}>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-20">
+
+                    {/* Feature 1: 100% Automated */}
+                    <div className="flex flex-col items-center md:items-start text-center md:text-left">
+                      <div className="flex items-center gap-2 mb-2">
+                        <svg className="w-5 h-5 text-[#5E1626] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style={{ strokeWidth: 2 }}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                        <h3 className="text-[0.95rem] font-semibold text-[#0F172A]">100% Automated</h3>
+                      </div>
+                      <p className="text-[0.875rem] text-[#475569]" style={{ lineHeight: '1.6' }}>
+                        Mira continuously analyzes customer conversations to detect emerging themes, pain points, and feature requests — no tagging or manual synthesis required.
+                      </p>
                     </div>
-                    <div className="flex items-center gap-1.5">
-                      <svg className="w-4 h-4 text-[#22C55E]" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      <span className="font-medium">Real-time Insights</span>
+
+                    {/* Feature 2: Powered by NLP */}
+                    <div className="flex flex-col items-center md:items-start text-center md:text-left">
+                      <div className="flex items-center gap-2 mb-2">
+                        <svg className="w-5 h-5 text-[#5E1626] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style={{ strokeWidth: 2 }}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                        <h3 className="text-[0.95rem] font-semibold text-[#0F172A]">Powered by NLP</h3>
+                      </div>
+                      <p className="text-[0.875rem] text-[#475569]" style={{ lineHeight: '1.6' }}>
+                        Our models understand nuance and context, surfacing what customers actually mean across thousands of hours of calls and messages.
+                      </p>
                     </div>
-                    <div className="flex items-center gap-1.5">
-                      <svg className="w-4 h-4 text-[#22C55E]" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      <span className="font-medium">Quick Setup</span>
+
+                    {/* Feature 3: Secure and Private */}
+                    <div className="flex flex-col items-center md:items-start text-center md:text-left">
+                      <div className="flex items-center gap-2 mb-2">
+                        <svg className="w-5 h-5 text-[#5E1626] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style={{ strokeWidth: 2 }}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                        <h3 className="text-[0.95rem] font-semibold text-[#0F172A]">Secure and Private</h3>
+                      </div>
+                      <p className="text-[0.875rem] text-[#475569]" style={{ lineHeight: '1.6' }}>
+                        Your data stays yours. Mira connects through secure APIs, never trains on your transcripts, and meets enterprise-grade privacy standards.
+                      </p>
                     </div>
+
                   </div>
                 </div>
               </div>
