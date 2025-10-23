@@ -429,9 +429,11 @@ function logoBlocks() {
       {/* Slack */}
       <div className="flex flex-col items-center gap-2 min-w-[96px]">
         <div className="w-16 h-16 bg-white rounded-xl shadow-sm border border-gray-200 flex items-center justify-center">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="#BDBDBD" xmlns="http://www.w3.org/2000/svg">
-            <title>slack</title>
-            <path d="M19.955 23.108c-1.74 0-3.151-1.411-3.151-3.151s1.411-3.151 3.151-3.151h7.889c1.74 0 3.151 1.411 3.151 3.151s-1.411 3.151-3.151 3.151v0zM19.955 24.693c1.739 0 3.149 1.41 3.149 3.149s-1.41 3.149-3.149 3.149c-1.738 0-3.148-1.408-3.149-3.146v-3.152zM23.108 12.044c0 1.74-1.411 3.151-3.151 3.151s-3.151-1.411-3.151-3.151v0-7.888c0-1.74 1.411-3.151 3.151-3.151s3.151 1.411 3.151 3.151v0zM24.693 12.044c0.001-1.738 1.41-3.147 3.148-3.147s3.148 1.41 3.148 3.149c0 1.738-1.408 3.147-3.145 3.149h-3.152zM12.044 8.893c1.736 0.005 3.142 1.413 3.142 3.15s-1.406 3.146-3.142 3.15h-7.888c-1.736-0.005-3.142-1.413-3.142-3.15s1.406-3.146 3.142-3.15h0zM12.044 7.305c-1.736-0.002-3.143-1.41-3.143-3.147 0-1.738 1.409-3.147 3.147-3.147s3.145 1.408 3.147 3.144v3.149zM8.893 19.955c0.005-1.736 1.413-3.142 3.15-3.142s3.146 1.406 3.15 3.142v7.889c-0.005 1.736-1.413 3.142-3.15 3.142s-3.146-1.406-3.15-3.142v-0zM7.305 19.955c-0.001 1.737-1.41 3.145-3.147 3.145s-3.147-1.409-3.147-3.147c0-1.738 1.408-3.146 3.145-3.147h3.149z"></path>
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7.5 13.5c0 1.4-1.1 2.5-2.5 2.5S2.5 14.9 2.5 13.5 3.6 11 5 11h2.5v2.5zM8.8 13.5c0-1.4 1.1-2.5 2.5-2.5s2.5 1.1 2.5 2.5V27c0 1.4-1.1 2.5-2.5 2.5S8.8 28.4 8.8 27V13.5z" fill="#E01E5A"/>
+            <path d="M11.2 7.5c-1.4 0-2.5-1.1-2.5-2.5S9.8 2.5 11.2 2.5s2.5 1.1 2.5 2.5V7.5h-2.5zM11.2 8.8c1.4 0 2.5 1.1 2.5 2.5s-1.1 2.5-2.5 2.5H5c-1.4 0-2.5-1.1-2.5-2.5S3.6 8.8 5 8.8h6.2z" fill="#36C5F0"/>
+            <path d="M18.8 11.2c0-1.4 1.1-2.5 2.5-2.5s2.5 1.1 2.5 2.5-1.1 2.5-2.5 2.5h-2.5v-2.5zM17.5 11.2c0 1.4-1.1 2.5-2.5 2.5S12.5 12.6 12.5 11.2V5c0-1.4 1.1-2.5 2.5-2.5s2.5 1.1 2.5 2.5v6.2z" fill="#2EB67D"/>
+            <path d="M15 17.5c1.4 0 2.5 1.1 2.5 2.5s-1.1 2.5-2.5 2.5-2.5-1.1-2.5-2.5V17.5H15zM15 18.8c-1.4 0-2.5-1.1-2.5-2.5s1.1-2.5 2.5-2.5H21c1.4 0 2.5 1.1 2.5 2.5s-1.1 2.5-2.5 2.5H15z" fill="#ECB22E"/>
           </svg>
         </div>
         <span className="text-sm text-gray-600 font-medium">Slack</span>
@@ -1225,17 +1227,14 @@ export default function Page() {
         </section>
 
         {/* Integrations Section - Two Even Horizontal Rows */}
-        <section className="py-24 px-4 sm:px-6 lg:px-8 bg-[#FAFAFA] relative" id="integrations">
+        <section className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 bg-white relative" id="integrations">
           <div className="max-w-[1200px] mx-auto">
             {/* Main container with white background */}
             <div className="rounded-3xl py-12 px-8 sm:px-12 bg-white border border-gray-300 shadow-sm">
               <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
                 {/* Left Column - Text Content */}
                 <div className="text-center lg:text-left space-y-5 lg:w-[40%]">
-                  <h2
-                    className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1E293B] leading-tight"
-                    style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
-                  >
+                  <h2 className="text-3xl sm:text-4xl md:text-5xl font-normal text-gray-900 leading-tight font-playfair-display">
                     Works with your tools
                   </h2>
                   <p
@@ -1287,19 +1286,20 @@ export default function Page() {
                   <div className="flex flex-wrap justify-center lg:justify-start gap-3">
                     {/* Slack */}
                     <div className="group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-250 cursor-pointer scroll-animation">
-                      <svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M7.5 13.5c0 1.4-1.1 2.5-2.5 2.5S2.5 14.9 2.5 13.5 3.6 11 5 11h2.5v2.5zM8.8 13.5c0-1.4 1.1-2.5 2.5-2.5s2.5 1.1 2.5 2.5V27c0 1.4-1.1 2.5-2.5 2.5S8.8 28.4 8.8 27V13.5z" fill="#E01E5A"/>
-                        <path d="M11.2 7.5c-1.4 0-2.5-1.1-2.5-2.5S9.8 2.5 11.2 2.5s2.5 1.1 2.5 2.5V7.5h-2.5zM11.2 8.8c1.4 0 2.5 1.1 2.5 2.5s-1.1 2.5-2.5 2.5H5c-1.4 0-2.5-1.1-2.5-2.5S3.6 8.8 5 8.8h6.2z" fill="#36C5F0"/>
-                        <path d="M18.8 11.2c0-1.4 1.1-2.5 2.5-2.5s2.5 1.1 2.5 2.5-1.1 2.5-2.5 2.5h-2.5v-2.5zM17.5 11.2c0 1.4-1.1 2.5-2.5 2.5S12.5 12.6 12.5 11.2V5c0-1.4 1.1-2.5 2.5-2.5s2.5 1.1 2.5 2.5v6.2z" fill="#2EB67D"/>
-                        <path d="M15 17.5c1.4 0 2.5 1.1 2.5 2.5s-1.1 2.5-2.5 2.5-2.5-1.1-2.5-2.5V17.5H15zM15 18.8c-1.4 0-2.5-1.1-2.5-2.5s1.1-2.5 2.5-2.5H21c1.4 0 2.5 1.1 2.5 2.5s-1.1 2.5-2.5 2.5H15z" fill="#ECB22E"/>
+                      <svg width="20" height="20" viewBox="0 0 127 127" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M27.2 80c0 7.3-5.9 13.2-13.2 13.2C6.7 93.2.8 87.3.8 80c0-7.3 5.9-13.2 13.2-13.2h13.2V80zm6.6 0c0-7.3 5.9-13.2 13.2-13.2 7.3 0 13.2 5.9 13.2 13.2v33c0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V80z" fill="#E01E5A"/>
+                        <path d="M47 27c-7.3 0-13.2-5.9-13.2-13.2C33.8 6.5 39.7.6 47 .6c7.3 0 13.2 5.9 13.2 13.2V27H47zm0 6.7c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H13.9C6.6 60.1.7 54.2.7 46.9c0-7.3 5.9-13.2 13.2-13.2H47z" fill="#36C5F0"/>
+                        <path d="M99.9 46.9c0-7.3 5.9-13.2 13.2-13.2 7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H99.9V46.9zm-6.6 0c0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V13.8C66.9 6.5 72.8.6 80.1.6c7.3 0 13.2 5.9 13.2 13.2v33.1z" fill="#2EB67D"/>
+                        <path d="M80.1 99.8c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V99.8h13.2zm0-6.6c-7.3 0-13.2-5.9-13.2-13.2 0-7.3 5.9-13.2 13.2-13.2h33.1c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H80.1z" fill="#ECB22E"/>
                       </svg>
                       <span className="text-sm font-medium text-[#1E293B]">Slack</span>
                     </div>
 
                     {/* Shopify */}
                     <div className="group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-250 cursor-pointer scroll-animation scroll-delay-1">
-                      <svg width="20" height="20" viewBox="0 0 32 32" fill="#95BF47" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M21.9 9.6c0-.1-.1-.2-.2-.2-.1 0-1.8-.1-1.8-.1s-1.2-1.2-1.3-1.3c-.1-.1-.3-.1-.4 0l-.6.2c0-.1-.1-.3-.2-.5-.6-1.2-1.5-1.8-2.6-1.8h-.3c-.4-.5-1-.7-1.4-.7-3.5 0-5.2 4.4-5.7 6.6-1.6.5-2.7.8-2.8.9-.8.3-.9.3-1 1-.1.5-2.1 16.4-2.1 16.4L18.5 32l9.8-2.1S21.9 9.7 21.9 9.6zM16.2 8l-1.6.5c.3-1.2.9-2.4 1.7-3 .2-.2.5-.4.9-.5-.1.9-.3 2-.3 3h-.7zm-1.1-3.7c.3 0 .6.1.8.2-.4.2-.8.4-1.2.8-1 1-1.7 2.5-2 4.3l-1.3.4c.5-2.1 2-5.7 3.7-5.7zm.5 13.1l-2.4-.8c0-.1 1.1-3.6 2.7-4.8.3-.2.6-.3.8-.3.1 0 .2 0 .3.1-.4 1.2-.8 3.3-1.4 5.8zm2.5-8.1c-.1 0-.3 0-.5.1-.3.1-.7.2-1.1.5-1.1.8-2.1 2.5-2.6 4.4l-2.3.7c.5-1.8 1.8-4.5 3.9-5.5.5-.2 1-.4 1.5-.4h.3c.1.4.2.8.3 1.2l.5-1z"/>
+                      <svg width="20" height="20" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M35.7 12.2c-.1-.2-.3-.3-.5-.3-1.4 0-2.5-.9-2.8-2.2-.2-1-.9-1.8-1.9-2-1.6-.4-3.3.8-3.5 2.5l-.7 4.8c-.6-.2-1.2-.3-1.8-.3-4.8 0-7.3 2.9-7.3 8.5 0 4.2 2.4 7.1 5.9 7.1 2.7 0 4.9-1.8 6.1-4.2l.3 3.5c0 .3.2.5.5.5h3.9c.3 0 .5-.2.5-.5l2.1-14.4c.1-.7.1-1.4.2-2.1 0-.1-.1-.2-.1-.4zm-9.2 15.4c-2 0-3.1-1.5-3.1-4.1 0-2.6 1.1-4.1 3.1-4.1s3.1 1.5 3.1 4.1c0 2.6-1.1 4.1-3.1 4.1z" fill="#95BF47"/>
+                        <path d="M24.5 19.5c-1.6 0-2.6 1.1-2.6 3 0 1.9 1 3 2.6 3s2.6-1.1 2.6-3c0-1.9-1-3-2.6-3z" fill="#5E8E3E"/>
                       </svg>
                       <span className="text-sm font-medium text-[#1E293B]">Shopify</span>
                     </div>
@@ -1307,8 +1307,8 @@ export default function Page() {
                     {/* Zendesk */}
                     <div className="group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-250 cursor-pointer scroll-animation scroll-delay-2">
                       <svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="16" cy="16" r="13" stroke="#03363D" strokeWidth="2.5"/>
-                        <path d="M16 8v8l6 6" stroke="#03363D" strokeWidth="2.5" strokeLinecap="round"/>
+                        <path d="M3 3h12v12c0 6.627-5.373 12-12 12V15C3 8.373 8.373 3 15 3z" fill="#03363D"/>
+                        <path d="M29 17v12H17c0-6.627 5.373-12 12-12z" fill="#03363D"/>
                       </svg>
                       <span className="text-sm font-medium text-[#1E293B]">Zendesk</span>
                     </div>
@@ -1316,8 +1316,8 @@ export default function Page() {
                     {/* Gorgias */}
                     <div className="group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-250 cursor-pointer scroll-animation scroll-delay-3">
                       <svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="6" y="6" width="20" height="20" rx="4" fill="#2D2D2D"/>
-                        <path d="M16 10v12M10 16h12" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+                        <rect width="32" height="32" rx="6" fill="#222222"/>
+                        <path d="M16 9l-5 5h3v9h4v-9h3l-5-5z" fill="#FFFFFF"/>
                       </svg>
                       <span className="text-sm font-medium text-[#1E293B]">Gorgias</span>
                     </div>
