@@ -1206,7 +1206,7 @@ export default function Page() {
                     className="text-base sm:text-lg text-[#475569] leading-relaxed max-w-md mx-auto lg:mx-0"
                     style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                   >
-                    Integrate diverse data sources to enrich Mira's knowledge and capabilities.
+                    Integrate diverse data sources to enrich Mira&apos;s knowledge and capabilities.
                   </p>
                 </div>
 
