@@ -632,29 +632,14 @@ export default function Page() {
             </svg>
           </Link>
           <nav className="flex items-center gap-6">
-            <Link href="#demo" className="text-gray-700 hover:text-gray-900 transition-colors hidden md:block">
-              Platform
-            </Link>
-            <Link href="#integrations" className="text-gray-700 hover:text-gray-900 transition-colors hidden md:block">
-              Integrations
-            </Link>
-            <Link href="#features" className="text-gray-700 hover:text-gray-900 transition-colors hidden md:block">
-              Features
-            </Link>
-            <Link href="#security" className="text-gray-700 hover:text-gray-900 transition-colors hidden md:block">
-              Security
-            </Link>
-            <Button 
+            <Button
               size="sm"
               className="bg-[#152D30] hover:bg-[#1C3B3F] text-white font-medium rounded-full px-6 py-2"
               onClick={() => {
-                document.getElementById('early-access-form')?.scrollIntoView({ 
-                  behavior: 'smooth',
-                  block: 'center'
-                });
+                window.open('https://calendar.notion.so/meet/nkokal/0hq33q41', '_blank');
               }}
             >
-              Book Demo
+              Contact
             </Button>
           </nav>
         </div>
@@ -678,20 +663,71 @@ export default function Page() {
                 {/* Modern CTA Section */}
                 <div className="w-full max-w-[640px] mx-auto px-4 sm:px-6">
                   {/* Email Input + Button */}
-                  <div className="flex flex-col sm:flex-row gap-3 items-center justify-center">
+                  <form
+                    action="https://formspree.io/f/xldnavne"
+                    method="POST"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      const form = e.target as HTMLFormElement;
+                      const formData = new FormData(form);
+                      const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+                      const originalButtonText = submitButton.textContent;
+
+                      // Disable button during submission
+                      submitButton.disabled = true;
+                      submitButton.textContent = 'Submitting...';
+
+                      // Submit to Formspree
+                      fetch('https://formspree.io/f/xldnavne', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                          'Accept': 'application/json'
+                        }
+                      }).then(response => {
+                        if (response.ok) {
+                          // Success - show submitted message
+                          submitButton.textContent = 'Submitted!';
+                          submitButton.style.backgroundColor = '#E6FFD8';
+                          submitButton.style.color = '#0F172A';
+                          submitButton.className = 'w-full sm:w-auto h-[52px] px-7 text-[15px] font-medium rounded-full transition-all duration-200 shadow-sm whitespace-nowrap';
+                          form.reset();
+                          // Reset button after 3 seconds
+                          setTimeout(() => {
+                            submitButton.disabled = false;
+                            submitButton.textContent = originalButtonText || 'Get in touch';
+                            submitButton.className = 'w-full sm:w-auto h-[52px] px-7 text-[15px] font-medium text-white bg-[#0F172A] hover:bg-[#1E293B] rounded-full transition-all duration-200 shadow-sm hover:shadow-md whitespace-nowrap';
+                          }, 3000);
+                        } else {
+                          // Handle error
+                          submitButton.disabled = false;
+                          submitButton.textContent = originalButtonText || 'Get in touch';
+                          alert('There was a problem submitting your email. Please try again.');
+                        }
+                      }).catch(error => {
+                        submitButton.disabled = false;
+                        submitButton.textContent = originalButtonText || 'Get in touch';
+                        alert('There was a problem submitting your email. Please try again.');
+                      });
+                    }}
+                    className="flex flex-col sm:flex-row gap-3 items-center justify-center"
+                  >
                     <input
                       type="email"
+                      name="email"
                       placeholder="Enter your email"
+                      required
                       className="w-full sm:flex-1 h-[52px] px-5 text-[15px] font-medium text-gray-900 placeholder:text-gray-400 bg-white border border-[#E2E8F0] rounded-full focus:outline-none focus:ring-2 focus:ring-[#0F172A]/10 focus:border-[#0F172A] hover:border-gray-300 transition-all duration-200 shadow-sm"
                       style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                     />
                     <button
+                      type="submit"
                       className="w-full sm:w-auto h-[52px] px-7 text-[15px] font-medium text-white bg-[#0F172A] hover:bg-[#1E293B] rounded-full transition-all duration-200 shadow-sm hover:shadow-md whitespace-nowrap"
                       style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                     >
                       Get in touch
                     </button>
-                  </div>
+                  </form>
                 </div>
 
                 {/* Feature Highlights - Full Width */}
@@ -1316,7 +1352,7 @@ export default function Page() {
               <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
               <Link href="#" className="hover:text-white transition-colors">Terms of Service</Link>
               <Link href="#" className="hover:text-white transition-colors">Contact</Link>
-              <Link href="#" className="hover:text-white transition-colors">
+              <Link href="https://www.linkedin.com/company/miragtm/?originalSubdomain=ca" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
                 <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                 </svg>
