@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Noto_Sans } from "next/font/google";
+import { Noto_Sans, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
 const notoSans = Noto_Sans({ 
@@ -9,6 +9,15 @@ const notoSans = Noto_Sans({
   fallback: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
   preload: true,
   variable: '--font-noto-sans',
+})
+
+const playfairDisplay = Playfair_Display({ 
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['400', '500', '600', '700', '800', '900'],
+  fallback: ['Georgia', 'Times New Roman', 'serif'],
+  preload: true,
+  variable: '--font-playfair-display',
 })
 
 export const metadata: Metadata = {
@@ -56,7 +65,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={notoSans.variable}>
+    <html lang="en" className={`${notoSans.variable} ${playfairDisplay.variable}`}>
       <head>
         <link rel="icon" type="image/png" sizes="32x32" href="/images/idevibelogo.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/images/idevibelogo.png" />

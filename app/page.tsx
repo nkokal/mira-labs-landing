@@ -17,6 +17,76 @@ import {
 } from 'chart.js';
 ChartJS.register(CategoryScale, LinearScale, PointElement, Tooltip, Legend, LineElement);
 
+// Typewriter animation component - COMPLETELY REWRITTEN
+function TypewriterText() {
+  const [displayText, setDisplayText] = useState('');
+  const [isComplete, setIsComplete] = useState(false);
+  const [showCursor, setShowCursor] = useState(true);
+  const fullText = "Transform GTM Data into Intelligence.  ";
+  
+  useEffect(() => {
+    let index = 0;
+    const typingInterval = setInterval(() => {
+      if (index <= fullText.length) {
+        setDisplayText(fullText.slice(0, index));
+        index++;
+      } else {
+        setIsComplete(true);
+        clearInterval(typingInterval);
+        // Start blinking cursor after typing completes
+        const cursorInterval = setInterval(() => {
+          setShowCursor(prev => !prev);
+        }, 500);
+        return () => clearInterval(cursorInterval);
+      }
+    }, 100);
+
+    return () => clearInterval(typingInterval);
+  }, []);
+
+  // Pre-render the complete text to ensure proper spacing
+  const completeWords = fullText.split(' ');
+  
+  return (
+    <div className="w-full text-center px-4">
+      {displayText.split(' ').map((word, i, arr) => {
+        const isIntelligenceWord = word.toLowerCase().includes('intelligence');
+        const isLastWord = i === arr.length - 1;
+        
+        return (
+          <span key={i}>
+            <span className={isIntelligenceWord ? "italic" : ""} style={isIntelligenceWord ? { color: '#5B0A1E' } : {}}>
+              {word}
+            </span>
+            {!isLastWord && <span> </span>}
+          </span>
+        );
+      })}
+      {isComplete && (
+        <span className={`ml-1 ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity`}>|</span>
+      )}
+    </div>
+  );
+}
+
+// Clean subtle background
+function SubtleBackground() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Subtle grid pattern */}
+      <div className="absolute inset-0 opacity-20"
+           style={{
+             backgroundImage: `
+               linear-gradient(rgba(59, 130, 246, 0.02) 1px, transparent 1px),
+               linear-gradient(90deg, rgba(59, 130, 246, 0.02) 1px, transparent 1px)
+             `,
+             backgroundSize: '60px 60px'
+           }}>
+      </div>
+    </div>
+  );
+}
+
 function AnimatedPill() {
   const [currentText, setCurrentText] = useState(0);
   const texts = [
@@ -26,10 +96,10 @@ function AnimatedPill() {
     "Product feedback"
   ];
   const colors = [
-    "#EDB97A", // peach
-    "#FF6F6F", // coral
-    "#5C1814", // deep burgundy
-    "#D97B3E"  // orange
+    "#E6FFD9", // light green
+    "#152D30", // dark teal
+    "#819F7D", // sage green
+    "#5B0A1E"  // golden yellow
   ];
 
   useEffect(() => {
@@ -39,9 +109,18 @@ function AnimatedPill() {
     return () => clearInterval(interval);
   }, [texts.length]);
 
+  // Determine text color based on background
+  const getTextColor = (bgColor: string) => {
+    const lightBackgrounds = ["#E6FFD9"];
+    return lightBackgrounds.includes(bgColor) ? "#152D30" : "#FFFFFF";
+  };
+
   return (
-    <div className="inline-flex items-center px-6 py-3 text-white rounded-full text-sm font-medium shadow-lg transition-colors duration-500"
-      style={{ backgroundColor: colors[currentText] }}>
+    <div className="inline-flex items-center px-6 py-3 rounded-full text-sm font-medium shadow-lg transition-colors duration-500"
+      style={{ 
+        backgroundColor: colors[currentText],
+        color: getTextColor(colors[currentText])
+      }}>
       <span className="mr-2">✨</span>
       {texts[currentText]}
     </div>
@@ -76,12 +155,12 @@ function AnimatedLineChart() {
         data: [12, 15, 18, 22, 25, 30].map((value, index) => 
           index <= Math.floor(animationProgress * 5) ? value : 0
         ),
-        borderColor: '#EDB97A',
-        backgroundColor: 'rgba(237,185,122,0.1)',
+        borderColor: '#E6FFD9',
+        backgroundColor: 'rgba(230,255,217,0.1)',
         tension: 0.4,
         pointRadius: 4,
         pointHoverRadius: 6,
-        pointBackgroundColor: '#EDB97A',
+        pointBackgroundColor: '#E6FFD9',
         pointBorderColor: '#fff',
         pointBorderWidth: 2,
       },
@@ -90,12 +169,12 @@ function AnimatedLineChart() {
         data: [8, 10, 12, 14, 13, 15].map((value, index) => 
           index <= Math.floor(animationProgress * 5) ? value : 0
         ),
-        borderColor: '#FF6F6F',
-        backgroundColor: 'rgba(255,111,111,0.1)',
+        borderColor: '#152D30',
+        backgroundColor: 'rgba(21,45,48,0.1)',
         tension: 0.4,
         pointRadius: 4,
         pointHoverRadius: 6,
-        pointBackgroundColor: '#FF6F6F',
+        pointBackgroundColor: '#152D30',
         pointBorderColor: '#fff',
         pointBorderWidth: 2,
       },
@@ -104,12 +183,12 @@ function AnimatedLineChart() {
         data: [5, 7, 8, 10, 12, 14].map((value, index) => 
           index <= Math.floor(animationProgress * 5) ? value : 0
         ),
-        borderColor: '#5C1814',
-        backgroundColor: 'rgba(92,24,20,0.1)',
+        borderColor: '#819F7D',
+        backgroundColor: 'rgba(129,159,125,0.1)',
         tension: 0.4,
         pointRadius: 4,
         pointHoverRadius: 6,
-        pointBackgroundColor: '#5C1814',
+        pointBackgroundColor: '#819F7D',
         pointBorderColor: '#fff',
         pointBorderWidth: 2,
       },
@@ -186,29 +265,137 @@ function AnimatedLineChart() {
   );
 }
 
-// Carousel for integrations
-function IntegrationsCarousel() {
-  return (
-    <div className="overflow-hidden w-full py-2">
-      <div className="carousel-track flex items-center gap-12 animate-carousel">
-        {logoBlocks()}
-        {logoBlocks()}
+// Advanced animated logo grid with original SVG logos
+function AnimatedLogoGrid() {
+  const [visibleLogos, setVisibleLogos] = useState(0);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setVisibleLogos(prev => {
+        if (prev >= 8) {
+          return 0; // Reset to start the animation over
+        }
+        return prev + 1;
+      });
+    }, 800); // Animation timing
+    
+    return () => clearInterval(interval);
+  }, []);
+
+  const createLogoElement = (logoComponent: JSX.Element, index: number) => {
+    const isVisible = index < visibleLogos;
+    const isHovered = hoveredIndex === index;
+    return (
+      <div 
+        key={index} 
+        className={`flex-shrink-0 w-20 h-20 mx-3 transition-all duration-600 transform cursor-pointer ${
+          isVisible 
+            ? 'opacity-100 scale-100 translate-y-0' 
+            : 'opacity-0 scale-75 translate-y-6'
+        } ${isHovered ? 'scale-105 -translate-y-1' : ''}`}
+        onMouseEnter={() => setHoveredIndex(index)}
+        onMouseLeave={() => setHoveredIndex(null)}
+        style={{
+          animationDelay: `${index * 150}ms`
+        }}
+      >
+        <div className="w-full h-full bg-white rounded-xl shadow-sm border border-gray-200 flex items-center justify-center hover:shadow-md transition-all duration-300 relative overflow-hidden group">
+          <div className="relative z-10 transition-transform duration-300 group-hover:scale-110">
+            {logoComponent}
+          </div>
+        </div>
       </div>
-      <style jsx>{`
-        @keyframes carousel {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        .animate-carousel {
-          animation: carousel 18s linear infinite;
-          width: max-content;
-        }
-        .logo-grey svg, .logo-grey svg * {
-          color: #BDBDBD;
-          fill: currentColor !important;
-          stroke: currentColor !important;
-        }
-      `}</style>
+    );
+  };
+
+  const createRow = (logos: JSX.Element[], rowIndex: number) => {
+    return (
+      <div key={rowIndex} className="flex items-center justify-center mb-4 gap-2">
+        {logos.map((logo, index) => createLogoElement(logo, rowIndex * 2 + index))}
+      </div>
+    );
+  };
+
+  // All original logos from logoBlocks function
+  const allLogos = [
+    // Salesforce
+    <svg key="salesforce" width="32" height="32" viewBox="0 0 24 24" fill="#BDBDBD" xmlns="http://www.w3.org/2000/svg">
+      <title>Salesforce icon</title>
+      <path d="M10.005 5.416c.75-.796 1.845-1.306 3.046-1.306 1.56 0 2.954.9 3.689 2.205.63-.3 1.35-.45 2.101-.45 2.849 0 5.159 2.34 5.159 5.22s-2.311 5.22-5.176 5.22c-.345 0-.689-.044-1.02-.104-.645 1.17-1.875 1.95-3.3 1.95-.6 0-1.155-.15-1.65-.375-.659 1.546-2.189 2.624-3.975 2.624-1.859 0-3.45-1.169-4.05-2.819-.27.061-.54.075-.825.075-2.204 0-4.005-1.8-4.005-4.05 0-1.5.811-2.805 2.01-3.51-.255-.57-.39-1.2-.39-1.846 0-2.58 2.1-4.649 4.65-4.649 1.53 0 2.85.704 3.72 1.8"/>
+    </svg>,
+    // Notion
+    <svg key="notion" width="32" height="32" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M3.25781 3.11684C3.67771 3.45796 3.83523 3.43193 4.62369 3.37933L12.0571 2.93299C12.2147 2.93299 12.0836 2.77571 12.0311 2.74957L10.7965 1.85711C10.56 1.67347 10.2448 1.46315 9.64083 1.51576L2.44308 2.04074C2.18059 2.06677 2.12815 2.19801 2.2327 2.30322L3.25781 3.11684ZM3.7041 4.84917V12.6704C3.7041 13.0907 3.91415 13.248 4.38693 13.222L12.5562 12.7493C13.0292 12.7233 13.0819 12.4341 13.0819 12.0927V4.32397C13.0819 3.98306 12.9508 3.79921 12.6612 3.82545L4.12422 4.32397C3.80918 4.35044 3.7041 4.50803 3.7041 4.84917ZM11.7688 5.26872C11.8212 5.50518 11.7688 5.74142 11.5319 5.76799L11.1383 5.84641V11.6205C10.7965 11.8042 10.4814 11.9092 10.2188 11.9092C9.79835 11.9092 9.69305 11.7779 9.37812 11.3844L6.80345 7.34249V11.2532L7.61816 11.437C7.61816 11.437 7.61816 11.9092 6.96086 11.9092L5.14879 12.0143C5.09615 11.9092 5.14879 11.647 5.33259 11.5944L5.80546 11.4634V6.29276L5.1489 6.24015C5.09625 6.00369 5.22739 5.66278 5.5954 5.63631L7.53935 5.50528L10.2188 9.5998V5.97765L9.53564 5.89924C9.4832 5.61018 9.69305 5.40028 9.95576 5.37425L11.7688 5.26872ZM1.83874 1.33212L9.32557 0.780787C10.245 0.701932 10.4815 0.754753 11.0594 1.17452L13.4492 2.85424C13.8436 3.14309 13.975 3.22173 13.975 3.53661V12.7493C13.975 13.3266 13.7647 13.6681 13.0293 13.7203L4.33492 14.2454C3.78291 14.2717 3.52019 14.193 3.23111 13.8253L1.47116 11.5419C1.1558 11.1216 1.02466 10.8071 1.02466 10.4392V2.25041C1.02466 1.77825 1.23504 1.38441 1.83874 1.33212Z"
+        fill="#BDBDBD"
+      />
+    </svg>,
+    // Slack
+    <svg key="slack" width="32" height="32" viewBox="0 0 32 32" fill="#BDBDBD" xmlns="http://www.w3.org/2000/svg">
+      <title>slack</title>
+      <path d="M19.955 23.108c-1.74 0-3.151-1.411-3.151-3.151s1.411-3.151 3.151-3.151h7.889c1.74 0 3.151 1.411 3.151 3.151s-1.411 3.151-3.151 3.151v0zM19.955 24.693c1.739 0 3.149 1.41 3.149 3.149s-1.41 3.149-3.149 3.149c-1.738 0-3.148-1.408-3.149-3.146v-3.152zM23.108 12.044c0 1.74-1.411 3.151-3.151 3.151s-3.151-1.411-3.151-3.151v0-7.888c0-1.74 1.411-3.151 3.151-3.151s3.151 1.411 3.151 3.151v0zM24.693 12.044c0.001-1.738 1.41-3.147 3.148-3.147s3.148 1.41 3.148 3.149c0 1.738-1.408 3.147-3.145 3.149h-3.152zM12.044 8.893c1.736 0.005 3.142 1.413 3.142 3.15s-1.406 3.146-3.142 3.15h-7.888c-1.736-0.005-3.142-1.413-3.142-3.15s1.406-3.146 3.142-3.15h0zM12.044 7.305c-1.736-0.002-3.143-1.41-3.143-3.147 0-1.738 1.409-3.147 3.147-3.147s3.145 1.408 3.147 3.144v3.149zM8.893 19.955c0.005-1.736 1.413-3.142 3.15-3.142s3.146 1.406 3.15 3.142v7.889c-0.005 1.736-1.413 3.142-3.15 3.142s-3.146-1.406-3.15-3.142v-0zM7.305 19.955c-0.001 1.737-1.41 3.145-3.147 3.145s-3.147-1.409-3.147-3.147c0-1.738 1.408-3.146 3.145-3.147h3.149z"></path>
+    </svg>,
+    // Gong
+    <svg key="gong" version="1.1" width="32" height="32" viewBox="0 0 55.4 60" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" style={{display:'block'}}>
+      <g>
+        <path fill="#BDBDBD" d="M54.1,25.7H37.8c-0.9,0-1.6,1-1.3,1.8l3.9,10.1c0.2,0.4-0.2,0.9-0.7,0.9l-5-0.3c-0.2,0-0.4,0.1-0.6,0.3
+		L30.3,44c-0.2,0.3-0.6,0.4-1,0.2l-5.8-3.9c-0.2-0.2-0.5-0.2-0.8,0l-8,5.4c-0.5,0.4-1.2-0.1-1-0.7L16,37c0.1-0.3-0.1-0.7-0.4-0.8
+		l-4.2-1.7c-0.4-0.2-0.6-0.7-0.3-1l3.7-4.6c0.2-0.2,0.2-0.6,0-0.8l-3.1-4.5c-0.3-0.4,0-1,0.5-1l4.9-0.4c0.4,0,0.6-0.3,0.6-0.7
+		l-0.4-6.8c0-0.5,0.5-0.8,0.9-0.7l6,2.5c0.3,0.1,0.6,0,0.8-0.2l4.2-4.6c0.3-0.4,0.9-0.3,1.1,0.2l2.5,6.4c0.3,0.8,1.3,1.1,2,0.6
+		l9.8-7.3c1.1-0.8,0.4-2.6-1-2.4L37.3,10c-0.3,0-0.6-0.1-0.7-0.4l-3.4-8.7c-0.4-0.9-1.5-1.1-2.2-0.4l-7.4,8
+		c-0.2,0.2-0.5,0.3-0.8,0.2l-9.7-4.1c-0.9-0.4-1.8,0.2-1.9,1.2l-0.4,10c0,0.4-0.3,0.6-0.6,0.6l-8.9,0.6c-1,0.1-1.6,1.2-1,2.1
+		l5.9,8.7c0.2,0.2,0.2,0.6,0,0.8l-6,6.9C-0.3,36,0,37.1,0.8,37.4l6.9,3c0.3,0.1,0.5,0.5,0.4,0.8L3.7,58.3c-0.3,1.2,1.1,2.1,2.1,1.4
+		l16.5-11.8c0.2-0.2,0.5-0.2,0.8,0l7.5,5.3c0.6,0.4,1.5,0.3,1.9-0.4l4.7-7.2c0.1-0.2,0.4-0.3,0.6-0.3l11.2,1.4
+		c0.9,0.1,1.8-0.6,1.5-1.5l-4.7-12.1c-0.1-0.3,0-0.7,0.4-0.9l8.5-4C55.9,27.6,55.5,25.7,54.1,25.7z"/>
+      </g>
+    </svg>,
+    // HubSpot
+    <svg key="hubspot" width="32" height="32" viewBox="0 0 32 32" fill="#BDBDBD" xmlns="http://www.w3.org/2000/svg">
+      <path d="M24.219 10.573v-3.792c1.026-0.479 1.682-1.505 1.688-2.641v-0.089c-0.005-1.609-1.307-2.917-2.922-2.922h-0.089c-1.615 0.005-2.922 1.307-2.927 2.922v0.089c0.005 1.125 0.656 2.146 1.672 2.63l0.016 0.010v3.802c-1.448 0.219-2.818 0.823-3.958 1.745l0.016-0.010-10.438-8.13c0.943-3.521-3.651-5.776-5.859-2.875-2.214 2.896 1.167 6.729 4.318 4.896l-0.016 0.010 10.26 7.984c-0.906 1.365-1.391 2.964-1.385 4.599 0 1.786 0.568 3.448 1.531 4.807l-0.016-0.026-3.125 3.12c-0.25-0.078-0.51-0.12-0.771-0.125h-0.005c-2.411 0-3.625 2.922-1.917 4.63 1.708 1.703 4.63 0.495 4.63-1.917-0.005-0.271-0.052-0.542-0.135-0.797l0.005 0.021 3.089-3.089c2.042 1.557 4.688 2.089 7.172 1.438 2.479-0.656 4.526-2.411 5.536-4.771 1.016-2.359 0.885-5.052-0.354-7.302-1.234-2.25-3.443-3.802-5.974-4.208l-0.052-0.010zM22.932 23.078c-3.807-0.010-5.703-4.615-3.005-7.302 2.693-2.688 7.292-0.781 7.292 3.026v0.005c0 2.359-1.911 4.271-4.276 4.271z"/>
+    </svg>,
+    // Zoom
+    <svg key="zoom" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="4" width="24" height="24" rx="6" stroke="#BDBDBD" strokeWidth="2" fill="none"/>
+      <circle cx="16" cy="16" r="6" stroke="#BDBDBD" strokeWidth="2" fill="none"/>
+      <polygon points="19,16 14,13 14,19" fill="#BDBDBD"/>
+    </svg>,
+    // Pipedrive
+    <svg key="pipedrive" width="32" height="32" viewBox="0 0 304 304" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+      <defs>
+        <path d="M59.6807,81.1772 C59.6807,101.5343 70.0078,123.4949 92.7336,123.4949 C109.5872,123.4949 126.6277,110.3374 126.6277,80.8785 C126.6277,55.0508 113.232,37.7119 93.2944,37.7119 C77.0483,37.7119 59.6807,49.1244 59.6807,81.1772 Z M101.3006,0 C142.0482,0 169.4469,32.2728 169.4469,80.3126 C169.4469,127.5978 140.584,160.60942 99.3224,160.60942 C79.6495,160.60942 67.0483,152.1836 60.4595,146.0843 C60.5063,147.5305 60.5374,149.1497 60.5374,150.8788 L60.5374,215 L18.32565,215 L18.32565,44.157 C18.32565,41.6732 17.53126,40.8873 15.07021,40.8873 L0.5531,40.8873 L0.5531,3.4741 L35.9736,3.4741 C52.282,3.4741 56.4564,11.7741 57.2508,18.1721 C63.8708,10.7524 77.5935,0 101.3006,0 Z" id="path-1"/>
+      </defs>
+      <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+        <g transform="translate(67.000000, 44.000000)">
+          <mask id="mask-2" fill="white">
+            <use href="#path-1"/>
+          </mask>
+          <use fill="#BDBDBD" xlinkHref="#path-1"/>
+        </g>
+      </g>
+    </svg>,
+    // Outreach.io
+    <svg key="outreach" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="4" width="24" height="24" rx="6" stroke="#BDBDBD" strokeWidth="2" fill="none"/>
+      <circle cx="16" cy="16" r="8" stroke="#BDBDBD" strokeWidth="2" fill="none"/>
+    </svg>
+  ];
+
+  // Split logos into 4 rows of 2
+  const rows = [
+    allLogos.slice(0, 2),   // Row 1
+    allLogos.slice(2, 4),   // Row 2  
+    allLogos.slice(4, 6),   // Row 3
+    allLogos.slice(6, 8)    // Row 4
+  ];
+
+  return (
+    <div className="relative w-full py-8">
+      <div className="flex flex-col items-center space-y-3">
+        {rows.map((rowLogos, index) => 
+          createRow(rowLogos, index)
+        )}
+      </div>
     </div>
   );
 }
@@ -365,8 +552,14 @@ export default function Page() {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F8F6F3] text-gray-900 font-inter">
+    <div className="flex flex-col min-h-screen bg-white text-gray-900 font-['Inter',-apple-system,BlinkMacSystemFont,'Segoe_UI',Roboto,sans-serif] relative">
+      {/* CSS-based grain overlay for additional texture */}
+      <div className="fixed inset-0 pointer-events-none z-0 opacity-30" style={{
+        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.9' numOctaves='6' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.4'/%3E%3C/svg%3E")`,
+        mixBlendMode: 'multiply'
+      }}></div>
       <style jsx global>{`
+        /* Clean animations remain for any future use */
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(20px); }
           to { opacity: 1; transform: translateY(0); }
@@ -420,36 +613,48 @@ export default function Page() {
       `}</style>
 
       {/* Navigation */}
-      <header className="py-4 border-b border-gray-100 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+      <header className="py-3 sm:py-4 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-6xl mx-auto flex items-center justify-between px-4">
-          <Link href="/" className="flex items-center gap-3 group">
-            <svg width="180" height="52" viewBox="0 0 240 70" xmlns="http://www.w3.org/2000/svg" style={{display:'block', height:'60px', width:'auto'}}>
+          <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
+            <svg width="120" height="40" viewBox="0 0 240 70" xmlns="http://www.w3.org/2000/svg" className="transition-colors duration-300 sm:w-[180px] sm:h-[52px]">
               <g transform="translate(25,35)">
-                <circle cx="0" cy="-12" r="3" fill="black" />
-                <circle cx="0" cy="12" r="3" fill="black" />
-                <circle cx="-12" cy="0" r="3" fill="black" />
-                <circle cx="12" cy="0" r="3" fill="black" />
-                <rect x="-2" y="-2" width="4" height="4" fill="black" />
-                <rect x="-6" y="-6" width="2" height="2" fill="black" />
-                <rect x="4" y="-6" width="2" height="2" fill="black" />
-                <rect x="-6" y="4" width="2" height="2" fill="black" />
-                <rect x="4" y="4" width="2" height="2" fill="black" />
+                <circle cx="0" cy="-12" r="3" fill="black" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
+                <circle cx="0" cy="12" r="3" fill="black" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
+                <circle cx="-12" cy="0" r="3" fill="black" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
+                <circle cx="12" cy="0" r="3" fill="black" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
+                <rect x="-2" y="-2" width="4" height="4" fill="black" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
+                <rect x="-6" y="-6" width="2" height="2" fill="black" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
+                <rect x="4" y="-6" width="2" height="2" fill="black" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
+                <rect x="-6" y="4" width="2" height="2" fill="black" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
+                <rect x="4" y="4" width="2" height="2" fill="black" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
               </g>
-              <text x="60" y="43" font-family="Arial, sans-serif" font-size="28" fill="black" font-weight="500">Mira</text>
+              <text x="60" y="43" font-family="Arial, sans-serif" font-size="28" fill="black" font-weight="500" className="group-hover:fill-[#819F7D] transition-colors duration-300">Mira</text>
             </svg>
           </Link>
           <nav className="flex items-center gap-6">
+            <Link href="#demo" className="text-gray-700 hover:text-gray-900 transition-colors hidden md:block">
+              Platform
+            </Link>
+            <Link href="#integrations" className="text-gray-700 hover:text-gray-900 transition-colors hidden md:block">
+              Integrations
+            </Link>
+            <Link href="#features" className="text-gray-700 hover:text-gray-900 transition-colors hidden md:block">
+              Features
+            </Link>
+            <Link href="#security" className="text-gray-700 hover:text-gray-900 transition-colors hidden md:block">
+              Security
+            </Link>
             <Button 
               size="sm"
+              className="bg-[#152D30] hover:bg-[#1C3B3F] text-white font-medium rounded-full px-6 py-2"
               onClick={() => {
                 document.getElementById('early-access-form')?.scrollIntoView({ 
                   behavior: 'smooth',
                   block: 'center'
                 });
               }}
-              className="bg-[#B3D1F7] hover:bg-[#90B8E6] text-black font-medium"
             >
-              Get Early Access
+              Book Demo
             </Button>
           </nav>
         </div>
@@ -457,155 +662,500 @@ export default function Page() {
 
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="py-8 sm:py-12 px-4 sm:px-8 relative overflow-hidden">
-          <div className="max-w-6xl mx-auto text-center relative z-10 rounded-3xl bg-white shadow-2xl p-6 sm:p-8 md:p-12 lg:p-16 border border-gray-100" style={{
-            boxShadow: '0 20px 60px -12px rgba(0, 0, 0, 0.08), 0 8px 24px -4px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.02)',
-            transform: 'translateY(0)',
-            transition: 'all 0.3s ease'
-          }}>
-            <div className="mb-6 sm:mb-8 flex items-center justify-center">
-              <AnimatedPill />
-            </div>
-            <h1 className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl mb-6 sm:mb-8 tracking-tight fade-in delay-1 font-noto text-gray-900 leading-tight`}>
-              transform sales calls into<br className="hidden sm:block" /><em className="italic">product intelligence</em>
-            </h1>
-            <p className="text-lg sm:text-xl text-gray-600 mb-8 sm:mb-12 fade-in delay-2 max-w-2xl mx-auto leading-relaxed font-normal px-4">
-              Give your PMM and Product teams the insights they need to build faster.
-            </p>
-            <form
-              id="early-access-form"
-              action="https://formspree.io/f/xldnavne"
-              method="POST"
-              className="flex flex-col sm:flex-row w-full max-w-md mx-auto gap-3 sm:gap-0"
-            >
-              <input
-                type="email"
-                name="email"
-                required
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-3 border border-gray-300 rounded-lg sm:rounded-l-lg sm:rounded-r-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-              <button
-                type="submit"
-                className="bg-[#B3D1F7] hover:bg-[#90B8E6] text-black px-6 py-3 rounded-lg sm:rounded-l-none sm:rounded-r-lg font-semibold"
-              >
-                Get Early Access
-              </button>
-            </form>
+        <section className="min-h-[85vh] sm:min-h-[90vh] flex items-center px-4 sm:px-8 py-12 sm:py-0 relative overflow-hidden bg-white">
+          <SubtleBackground />
+          <div className="max-w-6xl mx-auto text-center relative z-10">
+            <div className="space-y-4">
+                <div className="flex items-center justify-center">
+                  <AnimatedPill />
+                </div>
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-normal tracking-tight text-gray-900 leading-[1.1] sm:leading-[0.9] font-playfair-display px-2">
+                  <TypewriterText />
+                </h1>
+                <p className="text-base sm:text-lg md:text-xl text-gray-600 leading-relaxed font-normal max-w-3xl mx-auto px-4">
+                  Mira learns across your sales stack by combining LLMs and domain-specific machine learning. Give your Rev Ops and Product teams the insights they need to grow revenue.
+                </p>
+                {/* Modern CTA Section */}
+                <div className="w-full max-w-[640px] mx-auto px-4 sm:px-6">
+                  {/* Email Input + Button */}
+                  <div className="flex flex-col sm:flex-row gap-3 items-center justify-center">
+                    <input
+                      type="email"
+                      placeholder="Enter your email"
+                      className="w-full sm:flex-1 h-[52px] px-5 text-[15px] font-medium text-gray-900 placeholder:text-gray-400 bg-white border border-[#E2E8F0] rounded-full focus:outline-none focus:ring-2 focus:ring-[#0F172A]/10 focus:border-[#0F172A] hover:border-gray-300 transition-all duration-200 shadow-sm"
+                      style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
+                    />
+                    <button
+                      className="w-full sm:w-auto h-[52px] px-7 text-[15px] font-medium text-white bg-[#0F172A] hover:bg-[#1E293B] rounded-full transition-all duration-200 shadow-sm hover:shadow-md whitespace-nowrap"
+                      style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
+                    >
+                      Get in touch
+                    </button>
+                  </div>
+
+                  {/* Feature Badges */}
+                  <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-6 text-sm text-[#64748B]">
+                    <div className="flex items-center gap-1.5">
+                      <svg className="w-4 h-4 text-[#22C55E]" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      <span className="font-medium">AI-Powered Analysis</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <svg className="w-4 h-4 text-[#22C55E]" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      <span className="font-medium">Real-time Insights</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <svg className="w-4 h-4 text-[#22C55E]" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      <span className="font-medium">Quick Setup</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
           </div>
         </section>
 
         {/* Dashboard Preview Section */}
-        <section className="py-12 sm:py-24 px-4 sm:px-8">
-          <div className="max-w-6xl mx-auto scroll-animation">
-            <div className="text-center mb-12 sm:mb-16">
-              <h2 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 font-noto text-gray-900 tracking-tight`}>See Mira in Action</h2>
-              <div className="flex justify-center mb-4 relative group">
-                <button
-                  className="px-4 sm:px-6 py-2 rounded-xl border border-gray-200 bg-white text-base sm:text-lg font-bold text-gray-900 transition-all duration-150 hover:bg-gray-100 hover:border-gray-300 focus:outline-none"
-                  style={{boxShadow:'0 1px 4px 0 rgba(0,0,0,0.02)'}}
-                >
-                  Now in <span className="underline">Beta</span>
-                </button>
-                <div className="absolute left-1/2 -translate-x-1/2 -top-20 w-64 sm:w-80 bg-black text-white text-sm sm:text-base rounded-xl px-4 sm:px-6 py-4 shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 pointer-events-none transition-opacity duration-200 z-20" style={{whiteSpace:'pre-line'}}>
-                  Mira is still in early development. Be one of the first to try it out and provide feedback!
-                </div>
+        <section className="py-8 px-4 sm:px-8 bg-white relative" id="demo">
+          <SubtleBackground />
+          <div className="max-w-7xl mx-auto relative z-10">
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center px-3 py-1.5 rounded-full mb-6" style={{ backgroundColor: '#E6FFD9' }}>
+                <span className="text-sm font-semibold" style={{ color: '#152D30' }}>PLATFORM</span>
               </div>
-              <p className="text-lg sm:text-xl text-gray-600 font-normal">Transform your sales data into actionable insights</p>
+              <h2 className="text-4xl sm:text-5xl md:text-6xl font-normal mb-6 text-gray-900 tracking-tight font-playfair-display">See Mira in Action</h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">Think of Mira as a universal interface for all your GTM apps and tooling.</p>
             </div>
-            <div className="bg-white border border-gray-200 rounded-2xl shadow-xl overflow-hidden">
-              <div className="p-4 sm:p-8">
-                <div className="flex flex-col lg:flex-row gap-6 sm:gap-8">
-                  {/* Insights Panel */}
-                  <div className="w-full lg:w-1/2 lg:border-r border-gray-200">
-                    <div className="mb-8">
-                      <h3 className="text-xl font-semibold mb-6 text-gray-900 font-noto">Top Customer Pain Points</h3>
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                          <span className="w-4 h-4 rounded-full mr-3" style={{background:'#EDB97A'}}></span>
-                          <span className="text-gray-700 font-medium flex-1">Integration complexity</span>
-                          <span className="text-sm text-blue-600 font-semibold">23 mentions</span>
+          </div>
+        </section>
+
+
+        {/* Interactive Feature Sections */}
+        
+        {/* Section 1 - Real-Time GTM Intelligence */}
+        <section className="py-16 px-8 bg-white relative" id="features">
+          <SubtleBackground />
+          <div className="max-w-7xl mx-auto relative z-10">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              {/* Dashboard LEFT */}
+              <div className="order-2 lg:order-1 overflow-x-auto">
+                <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200">
+                  {/* Dashboard Header */}
+                  <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-semibold text-gray-900">GTM Intelligence Dashboard</h3>
+                      <div className="flex items-center gap-3">
+                        <input 
+                          type="text" 
+                          placeholder="Search insights..." 
+                          className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                        <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-600 mt-1">Transform your sales calls into actionable insights</p>
+                  </div>
+                  
+                  <div className="flex">
+                    {/* Sidebar */}
+                    <div className="w-70 bg-gray-900 p-4" style={{backgroundColor: '#152D30', width: '280px'}}>
+                      {/* Logo */}
+                      <div className="flex items-center gap-3 mb-8">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <g>
+                            <circle cx="16" cy="4" r="2" fill="#E6FFD9" />
+                            <circle cx="16" cy="28" r="2" fill="#E6FFD9" />
+                            <circle cx="4" cy="16" r="2" fill="#E6FFD9" />
+                            <circle cx="28" cy="16" r="2" fill="#E6FFD9" />
+                            <rect x="15" y="15" width="2" height="2" fill="#E6FFD9" />
+                            <rect x="11" y="11" width="1" height="1" fill="#E6FFD9" />
+                            <rect x="20" y="11" width="1" height="1" fill="#E6FFD9" />
+                            <rect x="11" y="20" width="1" height="1" fill="#E6FFD9" />
+                            <rect x="20" y="20" width="1" height="1" fill="#E6FFD9" />
+                          </g>
+                        </svg>
+                        <span className="text-white font-semibold">Mira Labs</span>
+                      </div>
+                      
+                      {/* Navigation */}
+                      <nav className="space-y-2 mb-8">
+                        <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-white bg-opacity-10 text-white">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
+                          </svg>
+                          <span className="text-sm font-medium">Overview</span>
                         </div>
-                        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                          <span className="w-4 h-4 rounded-full mr-3" style={{background:'#FF6F6F'}}></span>
-                          <span className="text-gray-700 font-medium flex-1">Pricing concerns</span>
-                          <span className="text-sm text-blue-600 font-semibold">18 mentions</span>
+                        <div className="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-300 hover:text-white">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          <span className="text-sm font-medium">Insights</span>
                         </div>
-                        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                          <span className="w-4 h-4 rounded-full mr-3" style={{background:'#5C1814'}}></span>
-                          <span className="text-gray-700 font-medium flex-1">Feature gaps</span>
-                          <span className="text-sm text-blue-600 font-semibold">15 mentions</span>
+                        <div className="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-300 hover:text-white">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path d="M15 8a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                          <span className="text-sm font-medium">Settings</span>
                         </div>
-                        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                          <span className="w-4 h-4 rounded-full mr-3" style={{background:'#D97B3E'}}></span>
-                          <span className="text-gray-700 font-medium flex-1">Onboarding time</span>
-                          <span className="text-sm text-blue-600 font-semibold">12 mentions</span>
+                      </nav>
+                      
+                      {/* Data Status */}
+                      <div className="mt-auto">
+                        <h4 className="text-xs font-semibold text-gray-400 uppercase mb-3">Data Status</h4>
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-green-400"></div>
+                            <span className="text-xs text-gray-300">Gong</span>
+                            <span className="text-xs text-gray-400 ml-auto">2m ago</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-green-400"></div>
+                            <span className="text-xs text-gray-300">SFDC</span>
+                            <span className="text-xs text-gray-400 ml-auto">5m ago</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-green-400"></div>
+                            <span className="text-xs text-gray-300">Chorus</span>
+                            <span className="text-xs text-gray-400 ml-auto">1h ago</span>
+                          </div>
                         </div>
                       </div>
                     </div>
                     
-                    <div>
-                      <h3 className="text-xl font-semibold mb-6 text-gray-900 font-noto">Recent Feature Requests</h3>
-                      <div className="space-y-4">
-                        <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
-                          <p className="text-gray-700 font-medium">&ldquo;We need better reporting capabilities&rdquo;</p>
-                          <p className="text-sm text-gray-500 mt-2 font-normal">- Enterprise Customer, 2 days ago</p>
+                    {/* Main Content */}
+                    <div className="flex-1 p-6">
+                      {/* Top Insights */}
+                      <div className="mb-8">
+                        <h4 className="text-lg font-semibold text-gray-900 mb-4">Top Insights This Week</h4>
+                        <div className="grid grid-cols-1 gap-4">
+                          {/* Insight Card 1 */}
+                          <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <div className="flex items-start justify-between mb-3">
+                              <div className="flex items-center gap-2">
+                                <svg className="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                                </svg>
+                                <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full" style={{backgroundColor: '#5B0A1E', color: 'white'}}>Pain Point</span>
+                              </div>
+                              <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
+                                <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+                              </svg>
+                            </div>
+                            <h5 className="font-semibold text-gray-900 mb-2">Integration Complexity</h5>
+                            <p className="text-sm text-gray-600 mb-3">Customers citing API setup and technical onboarding as major friction points</p>
+                            <div className="flex gap-4 text-xs text-gray-500">
+                              <span>23 mentions</span>
+                              <span>$450K affected</span>
+                            </div>
+                          </div>
+                          
+                          {/* Insight Card 2 */}
+                          <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <div className="flex items-start justify-between mb-3">
+                              <div className="flex items-center gap-2">
+                                <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                                </svg>
+                                <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full text-white" style={{backgroundColor: '#152D30'}}>Feature Request</span>
+                              </div>
+                              <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
+                                <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+                              </svg>
+                            </div>
+                            <h5 className="font-semibold text-gray-900 mb-2">Advanced Filtering</h5>
+                            <p className="text-sm text-gray-600 mb-3">Enterprise customers requesting granular data filtering and custom view capabilities</p>
+                            <div className="flex gap-4 text-xs text-gray-500">
+                              <span>31 mentions</span>
+                              <span>$1.2M opportunity</span>
+                            </div>
+                          </div>
                         </div>
-                        <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
-                          <p className="text-gray-700 font-medium">&ldquo;API integration with our existing tools&rdquo;</p>
-                          <p className="text-sm text-gray-500 mt-2 font-normal">- Mid-market prospect, 1 week ago</p>
-                        </div>
-                        <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
-                          <p className="text-gray-700 font-medium">&ldquo;Mobile app for on-the-go access&rdquo;</p>
-                          <p className="text-sm text-gray-500 mt-2 font-normal">- SMB Customer, 3 days ago</p>
-                        </div>
-                        <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
-                          <p className="text-gray-700 font-medium">&ldquo;Customizable dashboard widgets&rdquo;</p>
-                          <p className="text-sm text-gray-500 mt-2 font-normal">- Enterprise Customer, 5 days ago</p>
+                      </div>
+                      
+                      {/* Deal Risk Alerts Table */}
+                      <div>
+                        <h4 className="text-lg font-semibold text-gray-900 mb-4">Deal Risk Alerts</h4>
+                        <div className="overflow-hidden border border-gray-200 rounded-lg">
+                          <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gray-50">
+                              <tr>
+                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Account</th>
+                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Value</th>
+                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Risk</th>
+                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                              </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                              <tr>
+                                <td className="px-4 py-3 text-sm text-gray-900">Aviato</td>
+                                <td className="px-4 py-3 text-sm text-gray-900">$420,000</td>
+                                <td className="px-4 py-3">
+                                  <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full" style={{backgroundColor: '#E6FFD9', color: '#152D30'}}>Competitor</span>
+                                </td>
+                                <td className="px-4 py-3">
+                                  <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">Persistent</span>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td className="px-4 py-3 text-sm text-gray-900">Hooli</td>
+                                <td className="px-4 py-3 text-sm text-gray-900">$185,000</td>
+                                <td className="px-4 py-3">
+                                  <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full" style={{backgroundColor: '#5B0A1E', color: 'white'}}>Budget</span>
+                                </td>
+                                <td className="px-4 py-3">
+                                  <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">New Risk</span>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
                         </div>
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
+              
+              {/* Text RIGHT */}
+              <div className="order-1 lg:order-2 space-y-6">
+                <div className="inline-flex items-center px-3 py-1.5 rounded-full" style={{backgroundColor: '#152D30'}}>
+                  <span className="text-sm font-semibold text-white">OVERVIEW</span>
+                </div>
+                <h2 className="text-4xl sm:text-5xl font-normal text-gray-900 leading-tight font-playfair-display">
+                  Real-Time GTM Intelligence
+                </h2>
+                <p className="text-xl text-gray-600 leading-relaxed">
+                  Get instant clarity on pipeline health, deal risks, and emerging customer trends. Our central dashboard surfaces the most critical signals from your sales calls without digging through scattered notes or transcripts.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
 
-                  {/* Analytics Dashboard */}
-                  <div className="w-full lg:w-1/2">
-                    <div className="mb-8">
-                      <h3 className="text-xl font-semibold mb-6 text-gray-900 font-noto">Win/Loss Analysis</h3>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-                          <div className="text-2xl font-bold text-green-600">68%</div>
-                          <div className="text-xs text-gray-600 font-medium">Win Rate</div>
+        {/* Section 2 - Actionable Intelligence */}
+        <section className="py-16 px-8 bg-white relative">
+          <SubtleBackground />
+          <div className="max-w-7xl mx-auto relative z-10">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              {/* Text LEFT */}
+              <div className="order-1 lg:order-1 space-y-6">
+                <div className="inline-flex items-center px-3 py-1.5 rounded-full" style={{backgroundColor: '#E6FFD9', color: '#152D30'}}>
+                  <span className="text-sm font-semibold">INTELLIGENCE</span>
+                </div>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-normal text-gray-900 leading-tight font-playfair-display">
+                  Actionable Intelligence
+                </h2>
+                <p className="text-base sm:text-lg md:text-xl text-gray-600 leading-relaxed">
+                  Transform customer feedback into immediate action items for Product, Sales, and RevOps teams. Each insight comes with recommended next steps and assigns ownership for follow-up.
+                </p>
+              </div>
+              
+              {/* Dashboard RIGHT with Modal */}
+              <div className="order-2 lg:order-2 relative">
+                <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200">
+                  {/* Dashboard Header */}
+                  <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-semibold text-gray-900">GTM Intelligence Dashboard</h3>
+                      <div className="flex items-center gap-3">
+                        <input 
+                          type="text" 
+                          placeholder="Search insights..." 
+                          className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                        <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-600 mt-1">Transform your sales calls into actionable insights</p>
+                  </div>
+                  
+                  <div className="flex">
+                    {/* Sidebar */}
+                    <div className="w-70 bg-gray-900 p-4" style={{backgroundColor: '#152D30', width: '280px'}}>
+                      {/* Logo */}
+                      <div className="flex items-center gap-3 mb-8">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <g>
+                            <circle cx="16" cy="4" r="2" fill="#E6FFD9" />
+                            <circle cx="16" cy="28" r="2" fill="#E6FFD9" />
+                            <circle cx="4" cy="16" r="2" fill="#E6FFD9" />
+                            <circle cx="28" cy="16" r="2" fill="#E6FFD9" />
+                            <rect x="15" y="15" width="2" height="2" fill="#E6FFD9" />
+                            <rect x="11" y="11" width="1" height="1" fill="#E6FFD9" />
+                            <rect x="20" y="11" width="1" height="1" fill="#E6FFD9" />
+                            <rect x="11" y="20" width="1" height="1" fill="#E6FFD9" />
+                            <rect x="20" y="20" width="1" height="1" fill="#E6FFD9" />
+                          </g>
+                        </svg>
+                        <span className="text-white font-semibold">Mira Labs</span>
+                      </div>
+                      
+                      {/* Navigation */}
+                      <nav className="space-y-2 mb-8">
+                        <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-white bg-opacity-10 text-white">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
+                          </svg>
+                          <span className="text-sm font-medium">Overview</span>
                         </div>
-                        <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-                          <div className="text-2xl font-bold text-red-600">32%</div>
-                          <div className="text-xs text-gray-600 font-medium">Loss Rate</div>
+                        <div className="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-300 hover:text-white">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          <span className="text-sm font-medium">Insights</span>
+                        </div>
+                        <div className="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-300 hover:text-white">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path d="M15 8a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                          <span className="text-sm font-medium">Settings</span>
+                        </div>
+                      </nav>
+                      
+                      {/* Data Status */}
+                      <div className="mt-auto">
+                        <h4 className="text-xs font-semibold text-gray-400 uppercase mb-3">Data Status</h4>
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-green-400"></div>
+                            <span className="text-xs text-gray-300">Gong</span>
+                            <span className="text-xs text-gray-400 ml-auto">2m ago</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-green-400"></div>
+                            <span className="text-xs text-gray-300">SFDC</span>
+                            <span className="text-xs text-gray-400 ml-auto">5m ago</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-green-400"></div>
+                            <span className="text-xs text-gray-300">Chorus</span>
+                            <span className="text-xs text-gray-400 ml-auto">1h ago</span>
+                          </div>
                         </div>
                       </div>
                     </div>
                     
-                    <div>
-                      <h3 className="text-xl font-semibold mb-6 text-gray-900 font-noto">Top Objections</h3>
-                      <div className="space-y-4">
-                        <div className="flex items-center gap-4">
-                          <div className="w-4 h-4 rounded-full" style={{background:'#EDB97A'}}></div>
-                          <span className="text-gray-700 flex-1 font-medium">Budget constraints</span>
-                          <span className="text-sm text-gray-500 font-semibold">45%</span>
-                        </div>
-                        <div className="flex items-center gap-4">
-                          <div className="w-4 h-4 rounded-full" style={{background:'#FF6F6F'}}></div>
-                          <span className="text-gray-700 flex-1 font-medium">Timeline concerns</span>
-                          <span className="text-sm text-gray-500 font-semibold">32%</span>
-                        </div>
-                        <div className="flex items-center gap-4">
-                          <div className="w-4 h-4 rounded-full" style={{background:'#5C1814'}}></div>
-                          <span className="text-gray-700 flex-1 font-medium">Feature limitations</span>
-                          <span className="text-sm text-gray-500 font-semibold">28%</span>
+                    {/* Main Content */}
+                    <div className="flex-1 p-6">
+                      {/* Top Insights */}
+                      <div className="mb-8">
+                        <h4 className="text-lg font-semibold text-gray-900 mb-4">Top Insights This Week</h4>
+                        <div className="grid grid-cols-1 gap-4">
+                          {/* Clickable Insight Card */}
+                          <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer relative group">
+                            <div className="flex items-start justify-between mb-3">
+                              <div className="flex items-center gap-2">
+                                <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                                </svg>
+                                <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full" style={{backgroundColor: '#152D30', color: 'white'}}>Feature Request</span>
+                              </div>
+                              <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
+                                <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+                              </svg>
+                            </div>
+                            <h5 className="font-semibold text-gray-900 mb-2">Advanced Filtering</h5>
+                            <p className="text-sm text-gray-600 mb-3">Enterprise customers requesting granular data filtering and custom view capabilities</p>
+                            <div className="flex gap-4 text-xs text-gray-500">
+                              <span>31 mentions</span>
+                              <span>$1.2M opportunity</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <div className="mt-16">
-                      <h4 className="text-lg font-semibold mb-4 text-gray-900">Emerging Pain Points Over Time</h4>
-                      <AnimatedLineChart />
+                  </div>
+                </div>
+                
+                {/* Modal Overlay */}
+                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                  <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+                    {/* Modal Header */}
+                    <div className="flex items-center justify-between p-6 border-b border-gray-200">
+                      <div className="flex items-center gap-3">
+                        <svg className="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                        </svg>
+                        <h3 className="text-xl font-semibold text-gray-900">Advanced Filtering</h3>
+                        <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full" style={{backgroundColor: '#152D30', color: 'white'}}>Feature Request</span>
+                      </div>
+                      <button className="text-gray-400 hover:text-gray-600">
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
+                    
+                    {/* Modal Content */}
+                    <div className="p-6">
+                      {/* Top Metrics */}
+                      <div className="grid grid-cols-3 gap-4 mb-6">
+                        <div className="text-center">
+                          <div className="text-2xl font-bold text-gray-900">31</div>
+                          <div className="text-sm text-gray-500">Mentions across all calls</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-2xl font-bold text-gray-900">$1.2M</div>
+                          <div className="text-sm text-gray-500">Pipeline Impact</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-2xl font-bold text-gray-900">↗</div>
+                          <div className="text-sm text-gray-500">Increasing</div>
+                        </div>
+                      </div>
+                      
+                      {/* Insight Details */}
+                      <div className="mb-6">
+                        <p className="text-gray-700 mb-4">Enterprise customers requesting granular data filtering and custom view capabilities</p>
+                      </div>
+                      
+                      {/* Top Call Excerpts */}
+                      <div>
+                        <h4 className="text-lg font-semibold text-gray-900 mb-4">Top Call Excerpts</h4>
+                        <div className="space-y-4">
+                          {/* Call Excerpt 1 */}
+                          <div className="border border-gray-200 rounded-lg p-4">
+                            <div className="flex items-center justify-between mb-3">
+                              <h5 className="font-medium text-gray-900">Hooli - Discovery Call</h5>
+                              <button className="flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
+                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                                </svg>
+                                1:32
+                              </button>
+                            </div>
+                            <p className="text-gray-600 italic mb-3">&ldquo;The integration process is really complex for our team. We&apos;ve spent weeks trying to get this working with our existing systems. We need something more straightforward that doesn&apos;t require our engineering team to be involved in every step.&rdquo;</p>
+                            <div className="text-sm text-gray-500">
+                              Rep: Sarah Chen | Stage: Discovery | Deal Size: $185K
+                            </div>
+                          </div>
+                          
+                          {/* Call Excerpt 2 */}
+                          <div className="border border-gray-200 rounded-lg p-4">
+                            <div className="flex items-center justify-between mb-3">
+                              <h5 className="font-medium text-gray-900">Aviato - Enterprise Demo</h5>
+                              <button className="flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
+                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                                </svg>
+                                2:45
+                              </button>
+                            </div>
+                            <p className="text-gray-600 italic mb-3">&ldquo;We&apos;ve been looking for advanced filtering capabilities that match our workflow. Our current solution doesn&apos;t give us the granular control we need for our enterprise-level reporting requirements.&rdquo;</p>
+                            <div className="text-sm text-gray-500">
+                              Rep: Mike Rodriguez | Stage: Proposal | Deal Size: $420K
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -614,147 +1164,144 @@ export default function Page() {
           </div>
         </section>
 
-        {/* How It Works Section */}
-        <section className="py-24 px-8 bg-gray-50">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16 scroll-animation">
-              <h2 className={`text-display font-bold mb-6 font-noto text-gray-900 tracking-tight`}>How It Works</h2>
-              <p className="text-body-xl text-gray-600 font-normal">Connect your existing tools and let AI do the heavy lifting</p>
-            </div>
-
-            <div className="grid md:grid-cols-4 gap-8 mb-16">
-              <div className="text-center scroll-animation scroll-delay-1">
-                <div className="w-16 h-16 mx-auto mb-6 bg-blue-100 rounded-2xl flex items-center justify-center">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-blue-600">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                    <polyline points="7 10 12 15 17 10"/>
-                    <line x1="12" y1="15" x2="12" y2="3"/>
-                  </svg>
+        {/* Integrations Section - Two Even Horizontal Rows */}
+        <section className="py-24 px-4 sm:px-6 lg:px-8 bg-[#FAFAFA] relative" id="integrations">
+          <div className="max-w-[1200px] mx-auto">
+            {/* Main container with white background */}
+            <div className="rounded-3xl py-12 px-8 sm:px-12 bg-white border border-gray-300 shadow-sm">
+              <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
+                {/* Left Column - Text Content */}
+                <div className="text-center lg:text-left space-y-5 lg:w-[40%]">
+                  <h2
+                    className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1E293B] leading-tight"
+                    style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
+                  >
+                    Works with your tools
+                  </h2>
+                  <p
+                    className="text-base sm:text-lg text-[#475569] leading-relaxed max-w-md mx-auto lg:mx-0"
+                    style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
+                  >
+                    Integrate diverse data sources to enrich Mira's knowledge and capabilities.
+                  </p>
                 </div>
-                <h3 className="text-lg font-semibold mb-3 font-noto text-gray-900">1. Connect</h3>
-                <p className="text-gray-600 font-normal leading-relaxed">Integrate with Gong, Salesforce, HubSpot, and Zoom in minutes</p>
-              </div>
 
-              <div className="text-center scroll-animation scroll-delay-2">
-                <div className="w-16 h-16 mx-auto mb-6 bg-blue-100 rounded-2xl flex items-center justify-center">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-blue-600">
-                    <path d="M9 12l2 2 4-4"/>
-                    <path d="M21 12c-1 0-2-1-2-2s1-2 2-2 2 1 2 2-1 2-2 2z"/>
-                    <path d="M3 12c1 0 2-1 2-2s-1-2-2-2-2 1-2 2 1 2 2 2z"/>
-                    <path d="M12 3c0 1-1 2-2 2s-2-1-2-2 1-2 2-2 2 1 2 2z"/>
-                    <path d="M12 21c0-1 1-2 2-2s2 1 2 2-1 2-2 2-2-1-2-2z"/>
-                  </svg>
+                {/* Right Column - Two Horizontal Rows of Integration Pills */}
+                <div className="flex flex-col gap-5 lg:w-[60%]">
+                  {/* Row 1: Gong, Salesforce, HubSpot, Notion */}
+                  <div className="flex flex-wrap justify-center lg:justify-start gap-3">
+                    {/* Gong */}
+                    <div className="group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-250 cursor-pointer scroll-animation">
+                      <svg version="1.1" width="20" height="20" viewBox="0 0 55.4 60" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#64748B" d="M54.1,25.7H37.8c-0.9,0-1.6,1-1.3,1.8l3.9,10.1c0.2,0.4-0.2,0.9-0.7,0.9l-5-0.3c-0.2,0-0.4,0.1-0.6,0.3L30.3,44c-0.2,0.3-0.6,0.4-1,0.2l-5.8-3.9c-0.2-0.2-0.5-0.2-0.8,0l-8,5.4c-0.5,0.4-1.2-0.1-1-0.7L16,37c0.1-0.3-0.1-0.7-0.4-0.8l-4.2-1.7c-0.4-0.2-0.6-0.7-0.3-1l3.7-4.6c0.2-0.2,0.2-0.6,0-0.8l-3.1-4.5c-0.3-0.4,0-1,0.5-1l4.9-0.4c0.4,0,0.6-0.3,0.6-0.7l-0.4-6.8c0-0.5,0.5-0.8,0.9-0.7l6,2.5c0.3,0.1,0.6,0,0.8-0.2l4.2-4.6c0.3-0.4,0.9-0.3,1.1,0.2l2.5,6.4c0.3,0.8,1.3,1.1,2,0.6l9.8-7.3c1.1-0.8,0.4-2.6-1-2.4L37.3,10c-0.3,0-0.6-0.1-0.7-0.4l-3.4-8.7c-0.4-0.9-1.5-1.1-2.2-0.4l-7.4,8c-0.2,0.2-0.5,0.3-0.8,0.2l-9.7-4.1c-0.9-0.4-1.8,0.2-1.9,1.2l-0.4,10c0,0.4-0.3,0.6-0.6,0.6l-8.9,0.6c-1,0.1-1.6,1.2-1,2.1l5.9,8.7c0.2,0.2,0.2,0.6,0,0.8l-6,6.9C-0.3,36,0,37.1,0.8,37.4l6.9,3c0.3,0.1,0.5,0.5,0.4,0.8L3.7,58.3c-0.3,1.2,1.1,2.1,2.1,1.4l16.5-11.8c0.2-0.2,0.5-0.2,0.8,0l7.5,5.3c0.6,0.4,1.5,0.3,1.9-0.4l4.7-7.2c0.1-0.2,0.4-0.3,0.6-0.3l11.2,1.4c0.9,0.1,1.8-0.6,1.5-1.5l-4.7-12.1c-0.1-0.3,0-0.7,0.4-0.9l8.5-4C55.9,27.6,55.5,25.7,54.1,25.7z"/>
+                      </svg>
+                      <span className="text-sm font-medium text-[#1E293B]">Gong</span>
+                    </div>
+
+                    {/* Salesforce */}
+                    <div className="group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-250 cursor-pointer scroll-animation scroll-delay-1">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="#00A1E0" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10.005 5.416c.75-.796 1.845-1.306 3.046-1.306 1.56 0 2.954.9 3.689 2.205.63-.3 1.35-.45 2.101-.45 2.849 0 5.159 2.34 5.159 5.22s-2.311 5.22-5.176 5.22c-.345 0-.689-.044-1.02-.104-.645 1.17-1.875 1.95-3.3 1.95-.6 0-1.155-.15-1.65-.375-.659 1.546-2.189 2.624-3.975 2.624-1.859 0-3.45-1.169-4.05-2.819-.27.061-.54.075-.825.075-2.204 0-4.005-1.8-4.005-4.05 0-1.5.811-2.805 2.01-3.51-.255-.57-.39-1.2-.39-1.846 0-2.58 2.1-4.649 4.65-4.649 1.53 0 2.85.704 3.72 1.8"/>
+                      </svg>
+                      <span className="text-sm font-medium text-[#1E293B]">Salesforce</span>
+                    </div>
+
+                    {/* HubSpot */}
+                    <div className="group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-250 cursor-pointer scroll-animation scroll-delay-2">
+                      <svg width="20" height="20" viewBox="0 0 32 32" fill="#FF7A59" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M24.219 10.573v-3.792c1.026-0.479 1.682-1.505 1.688-2.641v-0.089c-0.005-1.609-1.307-2.917-2.922-2.922h-0.089c-1.615 0.005-2.922 1.307-2.927 2.922v0.089c0.005 1.125 0.656 2.146 1.672 2.63l0.016 0.010v3.802c-1.448 0.219-2.818 0.823-3.958 1.745l0.016-0.010-10.438-8.13c0.943-3.521-3.651-5.776-5.859-2.875-2.214 2.896 1.167 6.729 4.318 4.896l-0.016 0.010 10.26 7.984c-0.906 1.365-1.391 2.964-1.385 4.599 0 1.786 0.568 3.448 1.531 4.807l-0.016-0.026-3.125 3.12c-0.25-0.078-0.51-0.12-0.771-0.125h-0.005c-2.411 0-3.625 2.922-1.917 4.63 1.708 1.703 4.63 0.495 4.63-1.917-0.005-0.271-0.052-0.542-0.135-0.797l0.005 0.021 3.089-3.089c2.042 1.557 4.688 2.089 7.172 1.438 2.479-0.656 4.526-2.411 5.536-4.771 1.016-2.359 0.885-5.052-0.354-7.302-1.234-2.25-3.443-3.802-5.974-4.208l-0.052-0.010zM22.932 23.078c-3.807-0.010-5.703-4.615-3.005-7.302 2.693-2.688 7.292-0.781 7.292 3.026v0.005c0 2.359-1.911 4.271-4.276 4.271z"/>
+                      </svg>
+                      <span className="text-sm font-medium text-[#1E293B]">HubSpot</span>
+                    </div>
+
+                    {/* Notion */}
+                    <div className="group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-250 cursor-pointer scroll-animation scroll-delay-3">
+                      <svg width="20" height="20" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3.25781 3.11684C3.67771 3.45796 3.83523 3.43193 4.62369 3.37933L12.0571 2.93299C12.2147 2.93299 12.0836 2.77571 12.0311 2.74957L10.7965 1.85711C10.56 1.67347 10.2448 1.46315 9.64083 1.51576L2.44308 2.04074C2.18059 2.06677 2.12815 2.19801 2.2327 2.30322L3.25781 3.11684ZM3.7041 4.84917V12.6704C3.7041 13.0907 3.91415 13.248 4.38693 13.222L12.5562 12.7493C13.0292 12.7233 13.0819 12.4341 13.0819 12.0927V4.32397C13.0819 3.98306 12.9508 3.79921 12.6612 3.82545L4.12422 4.32397C3.80918 4.35044 3.7041 4.50803 3.7041 4.84917ZM11.7688 5.26872C11.8212 5.50518 11.7688 5.74142 11.5319 5.76799L11.1383 5.84641V11.6205C10.7965 11.8042 10.4814 11.9092 10.2188 11.9092C9.79835 11.9092 9.69305 11.7779 9.37812 11.3844L6.80345 7.34249V11.2532L7.61816 11.437C7.61816 11.437 7.61816 11.9092 6.96086 11.9092L5.14879 12.0143C5.09615 11.9092 5.14879 11.647 5.33259 11.5944L5.80546 11.4634V6.29276L5.1489 6.24015C5.09625 6.00369 5.22739 5.66278 5.5954 5.63631L7.53935 5.50528L10.2188 9.5998V5.97765L9.53564 5.89924C9.4832 5.61018 9.69305 5.40028 9.95576 5.37425L11.7688 5.26872ZM1.83874 1.33212L9.32557 0.780787C10.245 0.701932 10.4815 0.754753 11.0594 1.17452L13.4492 2.85424C13.8436 3.14309 13.975 3.22173 13.975 3.53661V12.7493C13.975 13.3266 13.7647 13.6681 13.0293 13.7203L4.33492 14.2454C3.78291 14.2717 3.52019 14.193 3.23111 13.8253L1.47116 11.5419C1.1558 11.1216 1.02466 10.8071 1.02466 10.4392V2.25041C1.02466 1.77825 1.23504 1.38441 1.83874 1.33212Z" fill="#000000"/>
+                      </svg>
+                      <span className="text-sm font-medium text-[#1E293B]">Notion</span>
+                    </div>
+                  </div>
+
+                  {/* Row 2: Slack, Shopify, Zendesk, Gorgias */}
+                  <div className="flex flex-wrap justify-center lg:justify-start gap-3">
+                    {/* Slack */}
+                    <div className="group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-250 cursor-pointer scroll-animation">
+                      <svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7.5 13.5c0 1.4-1.1 2.5-2.5 2.5S2.5 14.9 2.5 13.5 3.6 11 5 11h2.5v2.5zM8.8 13.5c0-1.4 1.1-2.5 2.5-2.5s2.5 1.1 2.5 2.5V27c0 1.4-1.1 2.5-2.5 2.5S8.8 28.4 8.8 27V13.5z" fill="#E01E5A"/>
+                        <path d="M11.2 7.5c-1.4 0-2.5-1.1-2.5-2.5S9.8 2.5 11.2 2.5s2.5 1.1 2.5 2.5V7.5h-2.5zM11.2 8.8c1.4 0 2.5 1.1 2.5 2.5s-1.1 2.5-2.5 2.5H5c-1.4 0-2.5-1.1-2.5-2.5S3.6 8.8 5 8.8h6.2z" fill="#36C5F0"/>
+                        <path d="M18.8 11.2c0-1.4 1.1-2.5 2.5-2.5s2.5 1.1 2.5 2.5-1.1 2.5-2.5 2.5h-2.5v-2.5zM17.5 11.2c0 1.4-1.1 2.5-2.5 2.5S12.5 12.6 12.5 11.2V5c0-1.4 1.1-2.5 2.5-2.5s2.5 1.1 2.5 2.5v6.2z" fill="#2EB67D"/>
+                        <path d="M15 17.5c1.4 0 2.5 1.1 2.5 2.5s-1.1 2.5-2.5 2.5-2.5-1.1-2.5-2.5V17.5H15zM15 18.8c-1.4 0-2.5-1.1-2.5-2.5s1.1-2.5 2.5-2.5H21c1.4 0 2.5 1.1 2.5 2.5s-1.1 2.5-2.5 2.5H15z" fill="#ECB22E"/>
+                      </svg>
+                      <span className="text-sm font-medium text-[#1E293B]">Slack</span>
+                    </div>
+
+                    {/* Shopify */}
+                    <div className="group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-250 cursor-pointer scroll-animation scroll-delay-1">
+                      <svg width="20" height="20" viewBox="0 0 32 32" fill="#95BF47" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21.9 9.6c0-.1-.1-.2-.2-.2-.1 0-1.8-.1-1.8-.1s-1.2-1.2-1.3-1.3c-.1-.1-.3-.1-.4 0l-.6.2c0-.1-.1-.3-.2-.5-.6-1.2-1.5-1.8-2.6-1.8h-.3c-.4-.5-1-.7-1.4-.7-3.5 0-5.2 4.4-5.7 6.6-1.6.5-2.7.8-2.8.9-.8.3-.9.3-1 1-.1.5-2.1 16.4-2.1 16.4L18.5 32l9.8-2.1S21.9 9.7 21.9 9.6zM16.2 8l-1.6.5c.3-1.2.9-2.4 1.7-3 .2-.2.5-.4.9-.5-.1.9-.3 2-.3 3h-.7zm-1.1-3.7c.3 0 .6.1.8.2-.4.2-.8.4-1.2.8-1 1-1.7 2.5-2 4.3l-1.3.4c.5-2.1 2-5.7 3.7-5.7zm.5 13.1l-2.4-.8c0-.1 1.1-3.6 2.7-4.8.3-.2.6-.3.8-.3.1 0 .2 0 .3.1-.4 1.2-.8 3.3-1.4 5.8zm2.5-8.1c-.1 0-.3 0-.5.1-.3.1-.7.2-1.1.5-1.1.8-2.1 2.5-2.6 4.4l-2.3.7c.5-1.8 1.8-4.5 3.9-5.5.5-.2 1-.4 1.5-.4h.3c.1.4.2.8.3 1.2l.5-1z"/>
+                      </svg>
+                      <span className="text-sm font-medium text-[#1E293B]">Shopify</span>
+                    </div>
+
+                    {/* Zendesk */}
+                    <div className="group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-250 cursor-pointer scroll-animation scroll-delay-2">
+                      <svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="16" cy="16" r="13" stroke="#03363D" strokeWidth="2.5"/>
+                        <path d="M16 8v8l6 6" stroke="#03363D" strokeWidth="2.5" strokeLinecap="round"/>
+                      </svg>
+                      <span className="text-sm font-medium text-[#1E293B]">Zendesk</span>
+                    </div>
+
+                    {/* Gorgias */}
+                    <div className="group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-250 cursor-pointer scroll-animation scroll-delay-3">
+                      <svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="6" y="6" width="20" height="20" rx="4" fill="#2D2D2D"/>
+                        <path d="M16 10v12M10 16h12" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+                      </svg>
+                      <span className="text-sm font-medium text-[#1E293B]">Gorgias</span>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-lg font-semibold mb-3 font-noto text-gray-900">2. Analyze</h3>
-                <p className="text-gray-600 font-normal leading-relaxed">AI processes calls, notes, and CRM data to extract insights</p>
-              </div>
-
-              <div className="text-center scroll-animation scroll-delay-3">
-                <div className="w-16 h-16 mx-auto mb-6 bg-blue-100 rounded-2xl flex items-center justify-center">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-blue-600">
-                    <path d="M3 3v18h18"/>
-                    <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/>
-                  </svg>
-                </div>
-                <h3 className="text-lg font-semibold mb-3 font-noto text-gray-900">3. Surface</h3>
-                <p className="text-gray-600 font-normal leading-relaxed">Get structured reports on pain points, objections, and trends</p>
-              </div>
-
-              <div className="text-center scroll-animation scroll-delay-4">
-                <div className="w-16 h-16 mx-auto mb-6 bg-blue-100 rounded-2xl flex items-center justify-center">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-blue-600">
-                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                    <path d="M2 17l10 5 10-5"/>
-                    <path d="M2 12l10 5 10-5"/>
-                  </svg>
-                </div>
-                <h3 className="text-lg font-semibold mb-3 font-noto text-gray-900">4. Act</h3>
-                <p className="text-gray-600 font-normal leading-relaxed">Use insights to inform product decisions and sales strategies</p>
-              </div>
-            </div>
-
-            {/* Integration Icons */}
-            <div className="text-center scroll-animation">
-              <h3 className="text-xl font-semibold mb-8 font-noto text-gray-900">Integrations</h3>
-              <IntegrationsCarousel />
-            </div>
-          </div>
-        </section>
-
-        {/* Features Section */}
-        <section className="py-24 px-8">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16 scroll-animation">
-              <h2 className={`text-display font-bold mb-6 font-noto text-gray-900 tracking-tight`}>AI-Powered GTM Intelligence</h2>
-              <p className="text-body-xl text-gray-600 font-normal">Transform scattered sales data into actionable product insights.</p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-8 relative">
-              <div className="bg-white p-8 rounded-2xl border border-gray-200 hover:border-blue-300 transition-colors scroll-animation scroll-delay-1 group shadow-sm hover:shadow-lg">
-                <div className="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center mb-6 group-hover:bg-blue-200 transition-colors">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M9 12l2 2 4-4"/>
-                    <path d="M21 12c-1 0-2-1-2-2s1-2 2-2 2 1 2 2-1 2-2 2z"/>
-                    <path d="M3 12c1 0 2-1 2-2s-1-2-2-2-2 1-2 2 1 2 2 2z"/>
-                    <path d="M12 3c0 1-1 2-2 2s-2-1-2-2 1-2 2-2 2 1 2 2z"/>
-                    <path d="M12 21c0-1 1-2 2-2s2 1 2 2-1 2-2 2-2-1-2-2z"/>
-                  </svg>
-                </div>
-                <h3 className={`text-xl font-semibold mb-4 group-hover:text-blue-600 transition-colors font-noto text-gray-900`}>Customer Intelligence</h3>
-                <p className="text-gray-600 leading-relaxed font-normal">
-                  Auto-analyze Gong calls to extract pain points, objections, feature requests, and voice-of-customer snippets that drive product decisions.
-                </p>
-              </div>
-
-              <div className="bg-white p-8 rounded-2xl border border-gray-200 hover:border-blue-300 transition-colors scroll-animation scroll-delay-2 group shadow-sm hover:shadow-lg">
-                <div className="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center mb-6 group-hover:bg-blue-200 transition-colors">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M3 3v18h18"/>
-                    <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/>
-                  </svg>
-                </div>
-                <h3 className={`text-xl font-semibold mb-4 group-hover:text-blue-600 transition-colors font-noto text-gray-900`}>Win/Loss Insights</h3>
-                <p className="text-gray-600 leading-relaxed font-normal">
-                  Perform automated win/loss analysis across recent deals using CRM + Gong data to understand why you&apos;re winning or losing.
-                </p>
-              </div>
-
-              <div className="bg-white p-8 rounded-2xl border border-gray-200 hover:border-blue-300 transition-colors scroll-animation scroll-delay-3 group shadow-sm hover:shadow-lg">
-                <div className="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center mb-6 group-hover:bg-blue-200 transition-colors">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                    <circle cx="9" cy="7" r="4"/>
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                  </svg>
-                </div>
-                <h3 className={`text-xl font-semibold mb-4 group-hover:text-blue-600 transition-colors font-noto text-gray-900`}>ICP Discovery</h3>
-                <p className="text-gray-600 leading-relaxed font-normal">
-                  Identify high-fit accounts by clustering past deals based on themes in customer language and outcomes.
-                </p>
               </div>
             </div>
           </div>
         </section>
+
       </main>
 
-      <footer className="w-full flex justify-center items-center py-6 bg-white border-t border-gray-100 mt-12">
-        <div className="flex flex-row items-center gap-4">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <g>
-              <circle cx="16" cy="4" r="2" fill="black" />
-              <circle cx="16" cy="28" r="2" fill="black" />
-              <circle cx="4" cy="16" r="2" fill="black" />
-              <circle cx="28" cy="16" r="2" fill="black" />
-              <rect x="15" y="15" width="2" height="2" fill="black" />
-              <rect x="11" y="11" width="1" height="1" fill="black" />
-              <rect x="20" y="11" width="1" height="1" fill="black" />
-              <rect x="11" y="20" width="1" height="1" fill="black" />
-              <rect x="20" y="20" width="1" height="1" fill="black" />
-            </g>
-          </svg>
-          <span className="text-xl font-semibold text-gray-900">Mira</span>
-          <span className="text-gray-500 text-base">© 2025 Mira Labs. All rights reserved.</span>
+      <footer className="text-white py-8 sm:py-12" style={{ backgroundColor: '#1C3B3F' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="group cursor-pointer">
+            <svg width="120" height="120" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="transition-colors duration-300 sm:w-[200px] sm:h-[200px]">
+              <g>
+                <circle cx="16" cy="4" r="2" fill="white" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
+                <circle cx="16" cy="28" r="2" fill="white" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
+                <circle cx="4" cy="16" r="2" fill="white" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
+                <circle cx="28" cy="16" r="2" fill="white" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
+                <rect x="15" y="15" width="2" height="2" fill="white" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
+                <rect x="11" y="11" width="1" height="1" fill="white" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
+                <rect x="20" y="11" width="1" height="1" fill="white" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
+                <rect x="11" y="20" width="1" height="1" fill="white" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
+                <rect x="20" y="20" width="1" height="1" fill="white" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
+              </g>
+            </svg>
+          </div>
+          <div className="flex flex-col gap-4 text-sm text-gray-400">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 sm:gap-8 text-sm sm:text-base">
+              <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
+              <Link href="#" className="hover:text-white transition-colors">Terms of Service</Link>
+              <Link href="#" className="hover:text-white transition-colors">Contact</Link>
+              <Link href="#" className="hover:text-white transition-colors">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+              </Link>
+            </div>
+            <div className="text-center sm:text-right text-xs sm:text-sm">
+              © 2025 Mira Labs. Designed in Toronto, Canada 💚
+            </div>
+          </div>
         </div>
       </footer>
     </div>
