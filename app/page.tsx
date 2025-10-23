@@ -1297,27 +1297,26 @@ export default function Page() {
 
                     {/* Shopify */}
                     <div className="group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-250 cursor-pointer scroll-animation scroll-delay-1">
-                      <svg width="20" height="20" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M35.7 12.2c-.1-.2-.3-.3-.5-.3-1.4 0-2.5-.9-2.8-2.2-.2-1-.9-1.8-1.9-2-1.6-.4-3.3.8-3.5 2.5l-.7 4.8c-.6-.2-1.2-.3-1.8-.3-4.8 0-7.3 2.9-7.3 8.5 0 4.2 2.4 7.1 5.9 7.1 2.7 0 4.9-1.8 6.1-4.2l.3 3.5c0 .3.2.5.5.5h3.9c.3 0 .5-.2.5-.5l2.1-14.4c.1-.7.1-1.4.2-2.1 0-.1-.1-.2-.1-.4zm-9.2 15.4c-2 0-3.1-1.5-3.1-4.1 0-2.6 1.1-4.1 3.1-4.1s3.1 1.5 3.1 4.1c0 2.6-1.1 4.1-3.1 4.1z" fill="#95BF47"/>
-                        <path d="M24.5 19.5c-1.6 0-2.6 1.1-2.6 3 0 1.9 1 3 2.6 3s2.6-1.1 2.6-3c0-1.9-1-3-2.6-3z" fill="#5E8E3E"/>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16.903 7.876c-.021-.108-.097-.18-.205-.18-1.235 0-2.192-.81-2.452-1.935-.18-.882-.793-1.59-1.673-1.756-1.41-.367-2.903.704-3.078 2.199l-.617 4.223c-.528-.176-1.056-.264-1.584-.264-4.224 0-6.422 2.551-6.422 7.485 0 3.696 2.112 6.246 5.19 6.246 2.376 0 4.312-1.584 5.366-3.696l.264 3.08c0 .264.176.44.44.44h3.432c.264 0 .44-.176.44-.44l1.849-12.689c.088-.616.088-1.232.176-1.848 0-.088-.088-.176-.088-.352zm-8.096 13.553c-1.76 0-2.727-1.32-2.727-3.608 0-2.288.967-3.608 2.727-3.608s2.727 1.32 2.727 3.608c0 2.288-.967 3.608-2.727 3.608z" fill="#95BF47"/>
+                        <path d="M20.903 7.028c-.088-.793-.705-1.408-1.498-1.496-.793-.088-1.586.44-1.849 1.144-.088.264-.088.528-.088.793l.088 5.454c0 .088.088.176.176.176h3.52c.088 0 .176-.088.176-.176l.088-5.278c0-.176 0-.44-.088-.617zm-1.849 5.542h-1.673v-4.751c0-.176.088-.352.264-.44.088-.088.264-.088.44-.088.352 0 .616.264.704.616l.176 4.575c.088.088.088.088.089.088z" fill="#5E8E3E"/>
                       </svg>
                       <span className="text-sm font-medium text-[#1E293B]">Shopify</span>
                     </div>
 
                     {/* Zendesk */}
                     <div className="group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-250 cursor-pointer scroll-animation scroll-delay-2">
-                      <svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3 3h12v12c0 6.627-5.373 12-12 12V15C3 8.373 8.373 3 15 3z" fill="#03363D"/>
-                        <path d="M29 17v12H17c0-6.627 5.373-12 12-12z" fill="#03363D"/>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12.914 2.904V1.25h-1.688v1.653c-4.5.367-8.043 4.088-8.043 8.636 0 4.78 3.886 8.666 8.666 8.666h.13c4.78 0 8.666-3.886 8.666-8.666 0-4.548-3.543-8.27-8.043-8.636h-.688zm-5.81 8.635c0-3.195 2.615-5.81 5.81-5.81v11.62c-3.195 0-5.81-2.615-5.81-5.81zm11.62 0c0 3.195-2.615 5.81-5.81 5.81v-11.62c3.195 0 5.81 2.615 5.81 5.81zm-6.81 10.211v1.654h1.688V21.75h-.13c-.519 0-1.038-.043-1.558-.13v.13z" fill="#03363D"/>
                       </svg>
                       <span className="text-sm font-medium text-[#1E293B]">Zendesk</span>
                     </div>
 
                     {/* Gorgias */}
                     <div className="group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-250 cursor-pointer scroll-animation scroll-delay-3">
-                      <svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="32" height="32" rx="6" fill="#222222"/>
-                        <path d="M16 9l-5 5h3v9h4v-9h3l-5-5z" fill="#FFFFFF"/>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="24" height="24" rx="4" fill="#1F1F1F"/>
+                        <path d="M12 6l-4 4h2.5v8h3v-8H16l-4-4z" fill="#FFFFFF"/>
                       </svg>
                       <span className="text-sm font-medium text-[#1E293B]">Gorgias</span>
                     </div>
@@ -1351,7 +1350,7 @@ export default function Page() {
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 sm:gap-8 text-sm sm:text-base">
               <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
               <Link href="#" className="hover:text-white transition-colors">Terms of Service</Link>
-              <Link href="#" className="hover:text-white transition-colors">Contact</Link>
+              <Link href="https://calendar.notion.so/meet/nkokal/0hq33q41" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Contact</Link>
               <Link href="https://www.linkedin.com/company/miragtm/?originalSubdomain=ca" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
                 <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
