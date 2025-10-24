@@ -1056,7 +1056,7 @@ export default function Page() {
                         <h3 className="text-[0.95rem] font-semibold text-[#152D30]">Private by Design</h3>
                       </div>
                       <p className="text-[0.875rem] text-[#64748B]" style={{ lineHeight: '1.7' }}>
-                        Mira connects securely through APIs, doesn't train on your transcripts, and meets enterprise-grade privacy and security standards.
+                        Mira connects securely through APIs, doesn&apos;t train on your transcripts, and meets enterprise-grade privacy and security standards.
                       </p>
                     </div>
 

@@ -66,7 +66,7 @@ export default function AIInfoPage() {
               By combining large language models (LLMs) with domain-specific machine learning, Mira translates raw customer data into insights your Product, RevOps, and GTM teams can act on immediately.
             </p>
             <p>
-              Founded in 2024, Mira's mission is to make customer understanding effortless — replacing manual note-taking, tagging, and call reviews with intelligent automation.
+              Founded in 2024, Mira&apos;s mission is to make customer understanding effortless — replacing manual note-taking, tagging, and call reviews with intelligent automation.
             </p>
           </div>
         </section>
