@@ -881,7 +881,7 @@ export default function Page() {
           boxShadow: 'none'
         }}
       >
-        <div className="max-w-6xl mx-auto flex items-center justify-between px-4">
+        <div className="w-full flex items-center justify-between px-6 sm:px-8">
           <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
             <svg width="120" height="40" viewBox="0 0 240 70" xmlns="http://www.w3.org/2000/svg" className="transition-colors duration-300 sm:w-[180px] sm:h-[52px]">
               <g transform="translate(25,35)">
@@ -1756,7 +1756,7 @@ export default function Page() {
       <footer className="text-white" style={{ backgroundColor: '#1C3B3F' }}>
         <div className="max-w-7xl mx-auto px-8 sm:px-12">
           {/* Top Section - Logo + Wordmark */}
-          <div className="flex flex-col sm:flex-row items-center sm:items-center justify-center sm:justify-start py-[44px] sm:py-[38px] opacity-0 animate-fadeIn" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
+          <div className="flex flex-col sm:flex-row items-center sm:items-center justify-center sm:justify-start py-[40px] sm:py-[34px] opacity-0 animate-fadeIn" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
             <div className="flex items-center gap-8 sm:gap-10">
               <div
                 className="group cursor-pointer"
@@ -1794,7 +1794,7 @@ export default function Page() {
           <div className="w-full h-px" style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}></div>
 
           {/* Bottom Navigation Row */}
-          <div className="py-[30px] flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-8">
+          <div className="py-[27px] flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-8">
             {/* Left - Copyright */}
             <div className="text-sm order-2 sm:order-1" style={{ color: '#E6FFD9', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: '14px' }}>
               © 2025 Mira Labs. All rights reserved.
