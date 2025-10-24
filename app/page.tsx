@@ -512,6 +512,7 @@ function logoBlocks() {
 
 export default function Page() {
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const [logoRotation, setLogoRotation] = useState(0);
 
   useEffect(() => {
     observerRef.current = new IntersectionObserver((entries) => {
@@ -553,6 +554,22 @@ export default function Page() {
     loadTally();
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercentage = (scrollPosition / maxScroll) * 100;
+
+      // Rotate up to 180 degrees based on scroll percentage
+      const rotation = Math.min((scrollPercentage / 100) * 180, 180);
+      setLogoRotation(rotation);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen bg-white text-gray-900 font-['Inter',-apple-system,BlinkMacSystemFont,'Segoe_UI',Roboto,sans-serif] relative">
       {/* CSS-based grain overlay for additional texture */}
@@ -575,7 +592,7 @@ export default function Page() {
         .delay-1 { animation-delay: 0.2s; }
         .delay-2 { animation-delay: 0.4s; }
         .delay-3 { animation-delay: 0.6s; }
-        
+
         .scroll-animation {
           opacity: 0;
           transform: translateY(20px);
@@ -590,6 +607,66 @@ export default function Page() {
         .scroll-delay-1 { transition-delay: 0.1s; }
         .scroll-delay-2 { transition-delay: 0.2s; }
         .scroll-delay-3 { transition-delay: 0.3s; }
+
+        /* Seamless infinite carousel animations with fade edges */
+        @keyframes scrollRightToLeft {
+          0% {
+            transform: translateX(0%);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+
+        @keyframes scrollLeftToRight {
+          0% {
+            transform: translateX(-50%);
+          }
+          100% {
+            transform: translateX(0%);
+          }
+        }
+
+        .carousel-row {
+          position: relative;
+          overflow: hidden;
+          display: flex;
+          width: 100%;
+          mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+          -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+
+        .carousel-track-right {
+          display: flex;
+          gap: 12px;
+          animation: scrollRightToLeft 30s linear infinite;
+          will-change: transform;
+        }
+
+        .carousel-track-right:hover {
+          animation-play-state: paused;
+        }
+
+        .carousel-track-left {
+          display: flex;
+          gap: 12px;
+          animation: scrollLeftToRight 30s linear infinite;
+          will-change: transform;
+        }
+
+        .carousel-track-left:hover {
+          animation-play-state: paused;
+        }
+
+        .carousel-pill {
+          flex-shrink: 0;
+          transition: transform 0.3s ease;
+        }
+
+        .carousel-pill:hover {
+          transform: scale(1.05);
+          z-index: 10;
+        }
 
         .chat-bubble {
           position: relative;
@@ -633,10 +710,19 @@ export default function Page() {
               <text x="60" y="43" font-family="Arial, sans-serif" font-size="28" fill="black" font-weight="500" className="group-hover:fill-[#819F7D] transition-colors duration-300">Mira</text>
             </svg>
           </Link>
-          <nav className="flex items-center gap-6">
+          <nav className="flex items-center gap-3 sm:gap-4">
             <Button
               size="sm"
-              className="bg-[#152D30] hover:bg-[#1C3B3F] text-white font-medium rounded-full px-6 py-2"
+              className="bg-transparent hover:bg-gray-100 text-[#152D30] font-medium rounded-full px-4 sm:px-6 py-2 border border-[#152D30]"
+              onClick={() => {
+                window.open('https://mira-production-e77e.up.railway.app/login', '_blank');
+              }}
+            >
+              Login
+            </Button>
+            <Button
+              size="sm"
+              className="bg-[#152D30] hover:bg-[#1C3B3F] text-white font-medium rounded-full px-4 sm:px-6 py-2"
               onClick={() => {
                 window.open('https://calendar.notion.so/meet/nkokal/0hq33q41', '_blank');
               }}
@@ -1247,78 +1333,217 @@ export default function Page() {
 
                 {/* Right Column - Two Horizontal Rows of Integration Pills */}
                 <div className="flex flex-col gap-5 lg:w-[60%]">
-                  {/* Row 1: Gong, Salesforce, HubSpot, Notion */}
-                  <div className="flex flex-wrap justify-center lg:justify-start gap-3">
-                    {/* Gong */}
-                    <div className="group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-250 cursor-pointer scroll-animation">
-                      <svg version="1.1" width="20" height="20" viewBox="0 0 55.4 60" xmlns="http://www.w3.org/2000/svg">
-                        <path fill="#64748B" d="M54.1,25.7H37.8c-0.9,0-1.6,1-1.3,1.8l3.9,10.1c0.2,0.4-0.2,0.9-0.7,0.9l-5-0.3c-0.2,0-0.4,0.1-0.6,0.3L30.3,44c-0.2,0.3-0.6,0.4-1,0.2l-5.8-3.9c-0.2-0.2-0.5-0.2-0.8,0l-8,5.4c-0.5,0.4-1.2-0.1-1-0.7L16,37c0.1-0.3-0.1-0.7-0.4-0.8l-4.2-1.7c-0.4-0.2-0.6-0.7-0.3-1l3.7-4.6c0.2-0.2,0.2-0.6,0-0.8l-3.1-4.5c-0.3-0.4,0-1,0.5-1l4.9-0.4c0.4,0,0.6-0.3,0.6-0.7l-0.4-6.8c0-0.5,0.5-0.8,0.9-0.7l6,2.5c0.3,0.1,0.6,0,0.8-0.2l4.2-4.6c0.3-0.4,0.9-0.3,1.1,0.2l2.5,6.4c0.3,0.8,1.3,1.1,2,0.6l9.8-7.3c1.1-0.8,0.4-2.6-1-2.4L37.3,10c-0.3,0-0.6-0.1-0.7-0.4l-3.4-8.7c-0.4-0.9-1.5-1.1-2.2-0.4l-7.4,8c-0.2,0.2-0.5,0.3-0.8,0.2l-9.7-4.1c-0.9-0.4-1.8,0.2-1.9,1.2l-0.4,10c0,0.4-0.3,0.6-0.6,0.6l-8.9,0.6c-1,0.1-1.6,1.2-1,2.1l5.9,8.7c0.2,0.2,0.2,0.6,0,0.8l-6,6.9C-0.3,36,0,37.1,0.8,37.4l6.9,3c0.3,0.1,0.5,0.5,0.4,0.8L3.7,58.3c-0.3,1.2,1.1,2.1,2.1,1.4l16.5-11.8c0.2-0.2,0.5-0.2,0.8,0l7.5,5.3c0.6,0.4,1.5,0.3,1.9-0.4l4.7-7.2c0.1-0.2,0.4-0.3,0.6-0.3l11.2,1.4c0.9,0.1,1.8-0.6,1.5-1.5l-4.7-12.1c-0.1-0.3,0-0.7,0.4-0.9l8.5-4C55.9,27.6,55.5,25.7,54.1,25.7z"/>
-                      </svg>
-                      <span className="text-sm font-medium text-[#1E293B]">Gong</span>
-                    </div>
+                  {/* Row 1: Scrolling Left to Right */}
+                  <div className="carousel-row">
+                    <div className="carousel-track-right">
+                      {/* Gong */}
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <img src="/logos/Burst Violet.webp" alt="Gong" height="20" className="w-auto h-5" />
+                        <span className="text-sm font-medium text-[#1E293B]">Gong</span>
+                      </div>
 
-                    {/* Salesforce */}
-                    <div className="group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-250 cursor-pointer scroll-animation scroll-delay-1">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="#00A1E0" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M10.005 5.416c.75-.796 1.845-1.306 3.046-1.306 1.56 0 2.954.9 3.689 2.205.63-.3 1.35-.45 2.101-.45 2.849 0 5.159 2.34 5.159 5.22s-2.311 5.22-5.176 5.22c-.345 0-.689-.044-1.02-.104-.645 1.17-1.875 1.95-3.3 1.95-.6 0-1.155-.15-1.65-.375-.659 1.546-2.189 2.624-3.975 2.624-1.859 0-3.45-1.169-4.05-2.819-.27.061-.54.075-.825.075-2.204 0-4.005-1.8-4.005-4.05 0-1.5.811-2.805 2.01-3.51-.255-.57-.39-1.2-.39-1.846 0-2.58 2.1-4.649 4.65-4.649 1.53 0 2.85.704 3.72 1.8"/>
-                      </svg>
-                      <span className="text-sm font-medium text-[#1E293B]">Salesforce</span>
-                    </div>
+                      {/* Salesforce */}
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#00A1E0" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M10.005 5.416c.75-.796 1.845-1.306 3.046-1.306 1.56 0 2.954.9 3.689 2.205.63-.3 1.35-.45 2.101-.45 2.849 0 5.159 2.34 5.159 5.22s-2.311 5.22-5.176 5.22c-.345 0-.689-.044-1.02-.104-.645 1.17-1.875 1.95-3.3 1.95-.6 0-1.155-.15-1.65-.375-.659 1.546-2.189 2.624-3.975 2.624-1.859 0-3.45-1.169-4.05-2.819-.27.061-.54.075-.825.075-2.204 0-4.005-1.8-4.005-4.05 0-1.5.811-2.805 2.01-3.51-.255-.57-.39-1.2-.39-1.846 0-2.58 2.1-4.649 4.65-4.649 1.53 0 2.85.704 3.72 1.8"/>
+                        </svg>
+                        <span className="text-sm font-medium text-[#1E293B]">Salesforce</span>
+                      </div>
 
-                    {/* HubSpot */}
-                    <div className="group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-250 cursor-pointer scroll-animation scroll-delay-2">
-                      <svg width="20" height="20" viewBox="0 0 32 32" fill="#FF7A59" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M24.219 10.573v-3.792c1.026-0.479 1.682-1.505 1.688-2.641v-0.089c-0.005-1.609-1.307-2.917-2.922-2.922h-0.089c-1.615 0.005-2.922 1.307-2.927 2.922v0.089c0.005 1.125 0.656 2.146 1.672 2.63l0.016 0.010v3.802c-1.448 0.219-2.818 0.823-3.958 1.745l0.016-0.010-10.438-8.13c0.943-3.521-3.651-5.776-5.859-2.875-2.214 2.896 1.167 6.729 4.318 4.896l-0.016 0.010 10.26 7.984c-0.906 1.365-1.391 2.964-1.385 4.599 0 1.786 0.568 3.448 1.531 4.807l-0.016-0.026-3.125 3.12c-0.25-0.078-0.51-0.12-0.771-0.125h-0.005c-2.411 0-3.625 2.922-1.917 4.63 1.708 1.703 4.63 0.495 4.63-1.917-0.005-0.271-0.052-0.542-0.135-0.797l0.005 0.021 3.089-3.089c2.042 1.557 4.688 2.089 7.172 1.438 2.479-0.656 4.526-2.411 5.536-4.771 1.016-2.359 0.885-5.052-0.354-7.302-1.234-2.25-3.443-3.802-5.974-4.208l-0.052-0.010zM22.932 23.078c-3.807-0.010-5.703-4.615-3.005-7.302 2.693-2.688 7.292-0.781 7.292 3.026v0.005c0 2.359-1.911 4.271-4.276 4.271z"/>
-                      </svg>
-                      <span className="text-sm font-medium text-[#1E293B]">HubSpot</span>
-                    </div>
+                      {/* HubSpot */}
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <svg width="20" height="20" viewBox="0 0 32 32" fill="#FF7A59" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M24.219 10.573v-3.792c1.026-0.479 1.682-1.505 1.688-2.641v-0.089c-0.005-1.609-1.307-2.917-2.922-2.922h-0.089c-1.615 0.005-2.922 1.307-2.927 2.922v0.089c0.005 1.125 0.656 2.146 1.672 2.63l0.016 0.010v3.802c-1.448 0.219-2.818 0.823-3.958 1.745l0.016-0.010-10.438-8.13c0.943-3.521-3.651-5.776-5.859-2.875-2.214 2.896 1.167 6.729 4.318 4.896l-0.016 0.010 10.26 7.984c-0.906 1.365-1.391 2.964-1.385 4.599 0 1.786 0.568 3.448 1.531 4.807l-0.016-0.026-3.125 3.12c-0.25-0.078-0.51-0.12-0.771-0.125h-0.005c-2.411 0-3.625 2.922-1.917 4.63 1.708 1.703 4.63 0.495 4.63-1.917-0.005-0.271-0.052-0.542-0.135-0.797l0.005 0.021 3.089-3.089c2.042 1.557 4.688 2.089 7.172 1.438 2.479-0.656 4.526-2.411 5.536-4.771 1.016-2.359 0.885-5.052-0.354-7.302-1.234-2.25-3.443-3.802-5.974-4.208l-0.052-0.010zM22.932 23.078c-3.807-0.010-5.703-4.615-3.005-7.302 2.693-2.688 7.292-0.781 7.292 3.026v0.005c0 2.359-1.911 4.271-4.276 4.271z"/>
+                        </svg>
+                        <span className="text-sm font-medium text-[#1E293B]">HubSpot</span>
+                      </div>
 
-                    {/* Notion */}
-                    <div className="group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-250 cursor-pointer scroll-animation scroll-delay-3">
-                      <svg width="20" height="20" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3.25781 3.11684C3.67771 3.45796 3.83523 3.43193 4.62369 3.37933L12.0571 2.93299C12.2147 2.93299 12.0836 2.77571 12.0311 2.74957L10.7965 1.85711C10.56 1.67347 10.2448 1.46315 9.64083 1.51576L2.44308 2.04074C2.18059 2.06677 2.12815 2.19801 2.2327 2.30322L3.25781 3.11684ZM3.7041 4.84917V12.6704C3.7041 13.0907 3.91415 13.248 4.38693 13.222L12.5562 12.7493C13.0292 12.7233 13.0819 12.4341 13.0819 12.0927V4.32397C13.0819 3.98306 12.9508 3.79921 12.6612 3.82545L4.12422 4.32397C3.80918 4.35044 3.7041 4.50803 3.7041 4.84917ZM11.7688 5.26872C11.8212 5.50518 11.7688 5.74142 11.5319 5.76799L11.1383 5.84641V11.6205C10.7965 11.8042 10.4814 11.9092 10.2188 11.9092C9.79835 11.9092 9.69305 11.7779 9.37812 11.3844L6.80345 7.34249V11.2532L7.61816 11.437C7.61816 11.437 7.61816 11.9092 6.96086 11.9092L5.14879 12.0143C5.09615 11.9092 5.14879 11.647 5.33259 11.5944L5.80546 11.4634V6.29276L5.1489 6.24015C5.09625 6.00369 5.22739 5.66278 5.5954 5.63631L7.53935 5.50528L10.2188 9.5998V5.97765L9.53564 5.89924C9.4832 5.61018 9.69305 5.40028 9.95576 5.37425L11.7688 5.26872ZM1.83874 1.33212L9.32557 0.780787C10.245 0.701932 10.4815 0.754753 11.0594 1.17452L13.4492 2.85424C13.8436 3.14309 13.975 3.22173 13.975 3.53661V12.7493C13.975 13.3266 13.7647 13.6681 13.0293 13.7203L4.33492 14.2454C3.78291 14.2717 3.52019 14.193 3.23111 13.8253L1.47116 11.5419C1.1558 11.1216 1.02466 10.8071 1.02466 10.4392V2.25041C1.02466 1.77825 1.23504 1.38441 1.83874 1.33212Z" fill="#000000"/>
-                      </svg>
-                      <span className="text-sm font-medium text-[#1E293B]">Notion</span>
+                      {/* Notion */}
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <svg width="20" height="20" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M3.25781 3.11684C3.67771 3.45796 3.83523 3.43193 4.62369 3.37933L12.0571 2.93299C12.2147 2.93299 12.0836 2.77571 12.0311 2.74957L10.7965 1.85711C10.56 1.67347 10.2448 1.46315 9.64083 1.51576L2.44308 2.04074C2.18059 2.06677 2.12815 2.19801 2.2327 2.30322L3.25781 3.11684ZM3.7041 4.84917V12.6704C3.7041 13.0907 3.91415 13.248 4.38693 13.222L12.5562 12.7493C13.0292 12.7233 13.0819 12.4341 13.0819 12.0927V4.32397C13.0819 3.98306 12.9508 3.79921 12.6612 3.82545L4.12422 4.32397C3.80918 4.35044 3.7041 4.50803 3.7041 4.84917ZM11.7688 5.26872C11.8212 5.50518 11.7688 5.74142 11.5319 5.76799L11.1383 5.84641V11.6205C10.7965 11.8042 10.4814 11.9092 10.2188 11.9092C9.79835 11.9092 9.69305 11.7779 9.37812 11.3844L6.80345 7.34249V11.2532L7.61816 11.437C7.61816 11.437 7.61816 11.9092 6.96086 11.9092L5.14879 12.0143C5.09615 11.9092 5.14879 11.647 5.33259 11.5944L5.80546 11.4634V6.29276L5.1489 6.24015C5.09625 6.00369 5.22739 5.66278 5.5954 5.63631L7.53935 5.50528L10.2188 9.5998V5.97765L9.53564 5.89924C9.4832 5.61018 9.69305 5.40028 9.95576 5.37425L11.7688 5.26872ZM1.83874 1.33212L9.32557 0.780787C10.245 0.701932 10.4815 0.754753 11.0594 1.17452L13.4492 2.85424C13.8436 3.14309 13.975 3.22173 13.975 3.53661V12.7493C13.975 13.3266 13.7647 13.6681 13.0293 13.7203L4.33492 14.2454C3.78291 14.2717 3.52019 14.193 3.23111 13.8253L1.47116 11.5419C1.1558 11.1216 1.02466 10.8071 1.02466 10.4392V2.25041C1.02466 1.77825 1.23504 1.38441 1.83874 1.33212Z" fill="#000000"/>
+                        </svg>
+                        <span className="text-sm font-medium text-[#1E293B]">Notion</span>
+                      </div>
+
+                      {/* Slack */}
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <svg width="20" height="20" viewBox="0 0 127 127" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M27.2 80c0 7.3-5.9 13.2-13.2 13.2C6.7 93.2.8 87.3.8 80c0-7.3 5.9-13.2 13.2-13.2h13.2V80zm6.6 0c0-7.3 5.9-13.2 13.2-13.2 7.3 0 13.2 5.9 13.2 13.2v33c0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V80z" fill="#E01E5A"/>
+                          <path d="M47 27c-7.3 0-13.2-5.9-13.2-13.2C33.8 6.5 39.7.6 47 .6c7.3 0 13.2 5.9 13.2 13.2V27H47zm0 6.7c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H13.9C6.6 60.1.7 54.2.7 46.9c0-7.3 5.9-13.2 13.2-13.2H47z" fill="#36C5F0"/>
+                          <path d="M99.9 46.9c0-7.3 5.9-13.2 13.2-13.2 7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H99.9V46.9zm-6.6 0c0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V13.8C66.9 6.5 72.8.6 80.1.6c7.3 0 13.2 5.9 13.2 13.2v33.1z" fill="#2EB67D"/>
+                          <path d="M80.1 99.8c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V99.8h13.2zm0-6.6c-7.3 0-13.2-5.9-13.2-13.2 0-7.3 5.9-13.2 13.2-13.2h33.1c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H80.1z" fill="#ECB22E"/>
+                        </svg>
+                        <span className="text-sm font-medium text-[#1E293B]">Slack</span>
+                      </div>
+
+                      {/* Shopify */}
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <img src="/logos/shopify.svg" alt="Shopify" height="20" className="w-auto h-5" />
+                        <span className="text-sm font-medium text-[#1E293B]">Shopify</span>
+                      </div>
+
+                      {/* Zendesk */}
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <img src="/logos/zendesk.svg" alt="Zendesk" height="20" className="w-auto h-5" />
+                        <span className="text-sm font-medium text-[#1E293B]">Zendesk</span>
+                      </div>
+
+                      {/* Monday.com */}
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <img src="/logos/Monday.com_idsCxCzY6N_0.svg" alt="Monday.com" height="20" className="w-auto h-5" />
+                        <span className="text-sm font-medium text-[#1E293B]">Monday.com</span>
+                      </div>
+
+                      {/* Duplicate set for seamless loop */}
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <img src="/logos/Burst Violet.webp" alt="Gong" height="20" className="w-auto h-5" />
+                        <span className="text-sm font-medium text-[#1E293B]">Gong</span>
+                      </div>
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#00A1E0" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M10.005 5.416c.75-.796 1.845-1.306 3.046-1.306 1.56 0 2.954.9 3.689 2.205.63-.3 1.35-.45 2.101-.45 2.849 0 5.159 2.34 5.159 5.22s-2.311 5.22-5.176 5.22c-.345 0-.689-.044-1.02-.104-.645 1.17-1.875 1.95-3.3 1.95-.6 0-1.155-.15-1.65-.375-.659 1.546-2.189 2.624-3.975 2.624-1.859 0-3.45-1.169-4.05-2.819-.27.061-.54.075-.825.075-2.204 0-4.005-1.8-4.005-4.05 0-1.5.811-2.805 2.01-3.51-.255-.57-.39-1.2-.39-1.846 0-2.58 2.1-4.649 4.65-4.649 1.53 0 2.85.704 3.72 1.8"/>
+                        </svg>
+                        <span className="text-sm font-medium text-[#1E293B]">Salesforce</span>
+                      </div>
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <svg width="20" height="20" viewBox="0 0 32 32" fill="#FF7A59" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M24.219 10.573v-3.792c1.026-0.479 1.682-1.505 1.688-2.641v-0.089c-0.005-1.609-1.307-2.917-2.922-2.922h-0.089c-1.615 0.005-2.922 1.307-2.927 2.922v0.089c0.005 1.125 0.656 2.146 1.672 2.63l0.016 0.010v3.802c-1.448 0.219-2.818 0.823-3.958 1.745l0.016-0.010-10.438-8.13c0.943-3.521-3.651-5.776-5.859-2.875-2.214 2.896 1.167 6.729 4.318 4.896l-0.016 0.010 10.26 7.984c-0.906 1.365-1.391 2.964-1.385 4.599 0 1.786 0.568 3.448 1.531 4.807l-0.016-0.026-3.125 3.12c-0.25-0.078-0.51-0.12-0.771-0.125h-0.005c-2.411 0-3.625 2.922-1.917 4.63 1.708 1.703 4.63 0.495 4.63-1.917-0.005-0.271-0.052-0.542-0.135-0.797l0.005 0.021 3.089-3.089c2.042 1.557 4.688 2.089 7.172 1.438 2.479-0.656 4.526-2.411 5.536-4.771 1.016-2.359 0.885-5.052-0.354-7.302-1.234-2.25-3.443-3.802-5.974-4.208l-0.052-0.010zM22.932 23.078c-3.807-0.010-5.703-4.615-3.005-7.302 2.693-2.688 7.292-0.781 7.292 3.026v0.005c0 2.359-1.911 4.271-4.276 4.271z"/>
+                        </svg>
+                        <span className="text-sm font-medium text-[#1E293B]">HubSpot</span>
+                      </div>
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <svg width="20" height="20" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M3.25781 3.11684C3.67771 3.45796 3.83523 3.43193 4.62369 3.37933L12.0571 2.93299C12.2147 2.93299 12.0836 2.77571 12.0311 2.74957L10.7965 1.85711C10.56 1.67347 10.2448 1.46315 9.64083 1.51576L2.44308 2.04074C2.18059 2.06677 2.12815 2.19801 2.2327 2.30322L3.25781 3.11684ZM3.7041 4.84917V12.6704C3.7041 13.0907 3.91415 13.248 4.38693 13.222L12.5562 12.7493C13.0292 12.7233 13.0819 12.4341 13.0819 12.0927V4.32397C13.0819 3.98306 12.9508 3.79921 12.6612 3.82545L4.12422 4.32397C3.80918 4.35044 3.7041 4.50803 3.7041 4.84917ZM11.7688 5.26872C11.8212 5.50518 11.7688 5.74142 11.5319 5.76799L11.1383 5.84641V11.6205C10.7965 11.8042 10.4814 11.9092 10.2188 11.9092C9.79835 11.9092 9.69305 11.7779 9.37812 11.3844L6.80345 7.34249V11.2532L7.61816 11.437C7.61816 11.437 7.61816 11.9092 6.96086 11.9092L5.14879 12.0143C5.09615 11.9092 5.14879 11.647 5.33259 11.5944L5.80546 11.4634V6.29276L5.1489 6.24015C5.09625 6.00369 5.22739 5.66278 5.5954 5.63631L7.53935 5.50528L10.2188 9.5998V5.97765L9.53564 5.89924C9.4832 5.61018 9.69305 5.40028 9.95576 5.37425L11.7688 5.26872ZM1.83874 1.33212L9.32557 0.780787C10.245 0.701932 10.4815 0.754753 11.0594 1.17452L13.4492 2.85424C13.8436 3.14309 13.975 3.22173 13.975 3.53661V12.7493C13.975 13.3266 13.7647 13.6681 13.0293 13.7203L4.33492 14.2454C3.78291 14.2717 3.52019 14.193 3.23111 13.8253L1.47116 11.5419C1.1558 11.1216 1.02466 10.8071 1.02466 10.4392V2.25041C1.02466 1.77825 1.23504 1.38441 1.83874 1.33212Z" fill="#000000"/>
+                        </svg>
+                        <span className="text-sm font-medium text-[#1E293B]">Notion</span>
+                      </div>
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <svg width="20" height="20" viewBox="0 0 127 127" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M27.2 80c0 7.3-5.9 13.2-13.2 13.2C6.7 93.2.8 87.3.8 80c0-7.3 5.9-13.2 13.2-13.2h13.2V80zm6.6 0c0-7.3 5.9-13.2 13.2-13.2 7.3 0 13.2 5.9 13.2 13.2v33c0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V80z" fill="#E01E5A"/>
+                          <path d="M47 27c-7.3 0-13.2-5.9-13.2-13.2C33.8 6.5 39.7.6 47 .6c7.3 0 13.2 5.9 13.2 13.2V27H47zm0 6.7c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H13.9C6.6 60.1.7 54.2.7 46.9c0-7.3 5.9-13.2 13.2-13.2H47z" fill="#36C5F0"/>
+                          <path d="M99.9 46.9c0-7.3 5.9-13.2 13.2-13.2 7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H99.9V46.9zm-6.6 0c0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V13.8C66.9 6.5 72.8.6 80.1.6c7.3 0 13.2 5.9 13.2 13.2v33.1z" fill="#2EB67D"/>
+                          <path d="M80.1 99.8c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V99.8h13.2zm0-6.6c-7.3 0-13.2-5.9-13.2-13.2 0-7.3 5.9-13.2 13.2-13.2h33.1c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H80.1z" fill="#ECB22E"/>
+                        </svg>
+                        <span className="text-sm font-medium text-[#1E293B]">Slack</span>
+                      </div>
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <img src="/logos/shopify.svg" alt="Shopify" height="20" className="w-auto h-5" />
+                        <span className="text-sm font-medium text-[#1E293B]">Shopify</span>
+                      </div>
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <img src="/logos/zendesk.svg" alt="Zendesk" height="20" className="w-auto h-5" />
+                        <span className="text-sm font-medium text-[#1E293B]">Zendesk</span>
+                      </div>
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <img src="/logos/Monday.com_idsCxCzY6N_0.svg" alt="Monday.com" height="20" className="w-auto h-5" />
+                        <span className="text-sm font-medium text-[#1E293B]">Monday.com</span>
+                      </div>
                     </div>
                   </div>
 
-                  {/* Row 2: Slack, Shopify, Zendesk, Gorgias */}
-                  <div className="flex flex-wrap justify-center lg:justify-start gap-3">
-                    {/* Slack */}
-                    <div className="group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-250 cursor-pointer scroll-animation">
-                      <svg width="20" height="20" viewBox="0 0 127 127" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M27.2 80c0 7.3-5.9 13.2-13.2 13.2C6.7 93.2.8 87.3.8 80c0-7.3 5.9-13.2 13.2-13.2h13.2V80zm6.6 0c0-7.3 5.9-13.2 13.2-13.2 7.3 0 13.2 5.9 13.2 13.2v33c0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V80z" fill="#E01E5A"/>
-                        <path d="M47 27c-7.3 0-13.2-5.9-13.2-13.2C33.8 6.5 39.7.6 47 .6c7.3 0 13.2 5.9 13.2 13.2V27H47zm0 6.7c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H13.9C6.6 60.1.7 54.2.7 46.9c0-7.3 5.9-13.2 13.2-13.2H47z" fill="#36C5F0"/>
-                        <path d="M99.9 46.9c0-7.3 5.9-13.2 13.2-13.2 7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H99.9V46.9zm-6.6 0c0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V13.8C66.9 6.5 72.8.6 80.1.6c7.3 0 13.2 5.9 13.2 13.2v33.1z" fill="#2EB67D"/>
-                        <path d="M80.1 99.8c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2-7.3 0-13.2-5.9-13.2-13.2V99.8h13.2zm0-6.6c-7.3 0-13.2-5.9-13.2-13.2 0-7.3 5.9-13.2 13.2-13.2h33.1c7.3 0 13.2 5.9 13.2 13.2 0 7.3-5.9 13.2-13.2 13.2H80.1z" fill="#ECB22E"/>
-                      </svg>
-                      <span className="text-sm font-medium text-[#1E293B]">Slack</span>
-                    </div>
+                  {/* Row 2: Scrolling Right to Left - New Logos */}
+                  <div className="carousel-row">
+                    <div className="carousel-track-left">
+                      {/* Pipedrive */}
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <img src="/logos/Pipedrive_Monogram_Green background.svg" alt="Pipedrive" height="20" className="w-auto h-5" />
+                        <span className="text-sm font-medium text-[#1E293B]">Pipedrive</span>
+                      </div>
 
-                    {/* Shopify */}
-                    <div className="group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-250 cursor-pointer scroll-animation scroll-delay-1">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16.903 7.876c-.021-.108-.097-.18-.205-.18-1.235 0-2.192-.81-2.452-1.935-.18-.882-.793-1.59-1.673-1.756-1.41-.367-2.903.704-3.078 2.199l-.617 4.223c-.528-.176-1.056-.264-1.584-.264-4.224 0-6.422 2.551-6.422 7.485 0 3.696 2.112 6.246 5.19 6.246 2.376 0 4.312-1.584 5.366-3.696l.264 3.08c0 .264.176.44.44.44h3.432c.264 0 .44-.176.44-.44l1.849-12.689c.088-.616.088-1.232.176-1.848 0-.088-.088-.176-.088-.352zm-8.096 13.553c-1.76 0-2.727-1.32-2.727-3.608 0-2.288.967-3.608 2.727-3.608s2.727 1.32 2.727 3.608c0 2.288-.967 3.608-2.727 3.608z" fill="#95BF47"/>
-                        <path d="M20.903 7.028c-.088-.793-.705-1.408-1.498-1.496-.793-.088-1.586.44-1.849 1.144-.088.264-.088.528-.088.793l.088 5.454c0 .088.088.176.176.176h3.52c.088 0 .176-.088.176-.176l.088-5.278c0-.176 0-.44-.088-.617zm-1.849 5.542h-1.673v-4.751c0-.176.088-.352.264-.44.088-.088.264-.088.44-.088.352 0 .616.264.704.616l.176 4.575c.088.088.088.088.089.088z" fill="#5E8E3E"/>
-                      </svg>
-                      <span className="text-sm font-medium text-[#1E293B]">Shopify</span>
-                    </div>
+                      {/* Cognism */}
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <img src="/logos/Cognism-Symbol-POS-RGB.svg" alt="Cognism" height="20" className="w-auto h-5" />
+                        <span className="text-sm font-medium text-[#1E293B]">Cognism</span>
+                      </div>
 
-                    {/* Zendesk */}
-                    <div className="group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-250 cursor-pointer scroll-animation scroll-delay-2">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12.914 2.904V1.25h-1.688v1.653c-4.5.367-8.043 4.088-8.043 8.636 0 4.78 3.886 8.666 8.666 8.666h.13c4.78 0 8.666-3.886 8.666-8.666 0-4.548-3.543-8.27-8.043-8.636h-.688zm-5.81 8.635c0-3.195 2.615-5.81 5.81-5.81v11.62c-3.195 0-5.81-2.615-5.81-5.81zm11.62 0c0 3.195-2.615 5.81-5.81 5.81v-11.62c3.195 0 5.81 2.615 5.81 5.81zm-6.81 10.211v1.654h1.688V21.75h-.13c-.519 0-1.038-.043-1.558-.13v.13z" fill="#03363D"/>
-                      </svg>
-                      <span className="text-sm font-medium text-[#1E293B]">Zendesk</span>
-                    </div>
+                      {/* Clay */}
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <img src="/logos/clay.webp" alt="Clay" height="20" className="w-auto h-5" />
+                        <span className="text-sm font-medium text-[#1E293B]">Clay</span>
+                      </div>
 
-                    {/* Gorgias */}
-                    <div className="group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-250 cursor-pointer scroll-animation scroll-delay-3">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="24" height="24" rx="4" fill="#1F1F1F"/>
-                        <path d="M12 6l-4 4h2.5v8h3v-8H16l-4-4z" fill="#FFFFFF"/>
-                      </svg>
-                      <span className="text-sm font-medium text-[#1E293B]">Gorgias</span>
+                      {/* Apollo.io */}
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <img src="/logos/Apollo.io_idY1K1QZB-_1.svg" alt="Apollo.io" height="20" className="w-auto h-5" />
+                        <span className="text-sm font-medium text-[#1E293B]">Apollo.io</span>
+                      </div>
+
+                      {/* ZoomInfo */}
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <img src="/logos/zoominfo.svg" alt="ZoomInfo" height="20" className="w-auto h-5" />
+                        <span className="text-sm font-medium text-[#1E293B]">ZoomInfo</span>
+                      </div>
+
+                      {/* Google */}
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                        </svg>
+                        <span className="text-sm font-medium text-[#1E293B]">Google</span>
+                      </div>
+
+                      {/* LinkedIn */}
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0A66C2" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                        <span className="text-sm font-medium text-[#1E293B]">LinkedIn</span>
+                      </div>
+
+                      {/* OpenAI */}
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M22.282 9.821a5.985 5.985 0 00-.516-4.91 6.046 6.046 0 00-6.51-2.9A6.065 6.065 0 004.981 4.18a5.985 5.985 0 00-3.998 2.9 6.046 6.046 0 00.743 7.097 5.98 5.98 0 00.51 4.911 6.051 6.051 0 006.515 2.9A5.985 5.985 0 0013.26 24a6.056 6.056 0 005.772-4.206 5.99 5.99 0 003.997-2.9 6.056 6.056 0 00-.747-7.073zM13.26 22.43a4.476 4.476 0 01-2.876-1.04l.141-.081 4.779-2.758a.795.795 0 00.392-.681v-6.737l2.02 1.168a.071.071 0 01.038.052v5.583a4.504 4.504 0 01-4.494 4.494zM3.6 18.304a4.47 4.47 0 01-.535-3.014l.142.085 4.783 2.759a.771.771 0 00.78 0l5.843-3.369v2.332a.08.08 0 01-.033.062L9.74 19.95a4.5 4.5 0 01-6.14-1.646zM2.34 7.896a4.485 4.485 0 012.366-1.973V11.6a.766.766 0 00.388.676l5.815 3.355-2.02 1.168a.076.076 0 01-.071 0l-4.83-2.786A4.504 4.504 0 012.34 7.872zm16.597 3.855l-5.833-3.387L15.119 7.2a.076.076 0 01.071 0l4.83 2.791a4.494 4.494 0 01-.676 8.105v-5.678a.79.79 0 00-.407-.667zm2.01-3.023l-.141-.085-4.774-2.782a.776.776 0 00-.785 0L9.409 9.23V6.897a.066.066 0 01.028-.061l4.83-2.787a4.5 4.5 0 016.68 4.66zm-12.64 4.135l-2.02-1.164a.08.08 0 01-.038-.057V6.075a4.5 4.5 0 017.375-3.453l-.142.08L8.704 5.46a.795.795 0 00-.393.681l-.004 6.727zm1.097-2.365l2.602-1.5 2.607 1.5v2.999l-2.597 1.5-2.607-1.5v-3z" fill="#10A37F"/>
+                        </svg>
+                        <span className="text-sm font-medium text-[#1E293B]">OpenAI</span>
+                      </div>
+
+                      {/* Duplicate set for seamless loop */}
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <img src="/logos/Pipedrive_Monogram_Green background.svg" alt="Pipedrive" height="20" className="w-auto h-5" />
+                        <span className="text-sm font-medium text-[#1E293B]">Pipedrive</span>
+                      </div>
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <img src="/logos/Cognism-Symbol-POS-RGB.svg" alt="Cognism" height="20" className="w-auto h-5" />
+                        <span className="text-sm font-medium text-[#1E293B]">Cognism</span>
+                      </div>
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <img src="/logos/clay.webp" alt="Clay" height="20" className="w-auto h-5" />
+                        <span className="text-sm font-medium text-[#1E293B]">Clay</span>
+                      </div>
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <img src="/logos/Apollo.io_idY1K1QZB-_1.svg" alt="Apollo.io" height="20" className="w-auto h-5" />
+                        <span className="text-sm font-medium text-[#1E293B]">Apollo.io</span>
+                      </div>
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <img src="/logos/zoominfo.svg" alt="ZoomInfo" height="20" className="w-auto h-5" />
+                        <span className="text-sm font-medium text-[#1E293B]">ZoomInfo</span>
+                      </div>
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                        </svg>
+                        <span className="text-sm font-medium text-[#1E293B]">Google</span>
+                      </div>
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0A66C2" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                        <span className="text-sm font-medium text-[#1E293B]">LinkedIn</span>
+                      </div>
+                      <div className="carousel-pill group flex items-center gap-2.5 px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M22.282 9.821a5.985 5.985 0 00-.516-4.91 6.046 6.046 0 00-6.51-2.9A6.065 6.065 0 004.981 4.18a5.985 5.985 0 00-3.998 2.9 6.046 6.046 0 00.743 7.097 5.98 5.98 0 00.51 4.911 6.051 6.051 0 006.515 2.9A5.985 5.985 0 0013.26 24a6.056 6.056 0 005.772-4.206 5.99 5.99 0 003.997-2.9 6.056 6.056 0 00-.747-7.073zM13.26 22.43a4.476 4.476 0 01-2.876-1.04l.141-.081 4.779-2.758a.795.795 0 00.392-.681v-6.737l2.02 1.168a.071.071 0 01.038.052v5.583a4.504 4.504 0 01-4.494 4.494zM3.6 18.304a4.47 4.47 0 01-.535-3.014l.142.085 4.783 2.759a.771.771 0 00.78 0l5.843-3.369v2.332a.08.08 0 01-.033.062L9.74 19.95a4.5 4.5 0 01-6.14-1.646zM2.34 7.896a4.485 4.485 0 012.366-1.973V11.6a.766.766 0 00.388.676l5.815 3.355-2.02 1.168a.076.076 0 01-.071 0l-4.83-2.786A4.504 4.504 0 012.34 7.872zm16.597 3.855l-5.833-3.387L15.119 7.2a.076.076 0 01.071 0l4.83 2.791a4.494 4.494 0 01-.676 8.105v-5.678a.79.79 0 00-.407-.667zm2.01-3.023l-.141-.085-4.774-2.782a.776.776 0 00-.785 0L9.409 9.23V6.897a.066.066 0 01.028-.061l4.83-2.787a4.5 4.5 0 016.68 4.66zm-12.64 4.135l-2.02-1.164a.08.08 0 01-.038-.057V6.075a4.5 4.5 0 017.375-3.453l-.142.08L8.704 5.46a.795.795 0 00-.393.681l-.004 6.727zm1.097-2.365l2.602-1.5 2.607 1.5v2.999l-2.597 1.5-2.607-1.5v-3z" fill="#10A37F"/>
+                        </svg>
+                        <span className="text-sm font-medium text-[#1E293B]">OpenAI</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1332,7 +1557,15 @@ export default function Page() {
       <footer className="text-white py-8 sm:py-12" style={{ backgroundColor: '#1C3B3F' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="group cursor-pointer">
-            <svg width="120" height="120" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="transition-colors duration-300 sm:w-[200px] sm:h-[200px]">
+            <svg
+              width="120"
+              height="120"
+              viewBox="0 0 32 32"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="transition-all duration-500 ease-out sm:w-[200px] sm:h-[200px]"
+              style={{ transform: `rotate(${logoRotation}deg)` }}
+            >
               <g>
                 <circle cx="16" cy="4" r="2" fill="white" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
                 <circle cx="16" cy="28" r="2" fill="white" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
