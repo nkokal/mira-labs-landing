@@ -26,28 +26,28 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "/images/idevibelogo.png",
+        url: "/logos/mira.png",
         type: "image/png",
         sizes: "32x32"
       },
       {
-        url: "/images/idevibelogo.png",
+        url: "/logos/mira.png",
         type: "image/png",
         sizes: "16x16"
       }
     ],
     apple: [
       {
-        url: "/images/idevibelogo.png",
+        url: "/logos/mira.png",
         type: "image/png",
         sizes: "180x180"
       }
     ],
-    shortcut: [{ url: "/images/idevibelogo.png" }],
+    shortcut: [{ url: "/logos/mira.png" }],
     other: [
       {
         rel: "icon",
-        url: "/images/idevibelogo.png",
+        url: "/logos/mira.png",
       },
     ],
   },
@@ -67,9 +67,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${notoSans.variable} ${playfairDisplay.variable}`}>
       <head>
-        <link rel="icon" type="image/png" sizes="32x32" href="/images/idevibelogo.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/images/idevibelogo.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/images/idevibelogo.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/logos/mira.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/logos/mira.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/logos/mira.png" />
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body className={`${notoSans.className} bg-white antialiased`}>{children}</body>
