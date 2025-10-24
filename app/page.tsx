@@ -983,7 +983,7 @@ export default function Page() {
                           setTimeout(() => {
                             submitButton.disabled = false;
                             submitButton.textContent = originalButtonText || 'Get in touch';
-                            submitButton.className = 'w-full sm:w-auto h-[52px] px-7 text-[15px] font-medium text-white bg-[#0F172A] hover:bg-[#1E293B] rounded-full transition-all duration-200 shadow-sm hover:shadow-md whitespace-nowrap';
+                            submitButton.className = 'w-full sm:w-auto h-[52px] px-7 text-[15px] font-medium text-[#152D30] bg-[#E6FFD9] hover:bg-[#d4f0c4] rounded-full transition-all duration-200 shadow-sm hover:shadow-md whitespace-nowrap';
                           }, 3000);
                         } else {
                           // Handle error
@@ -1004,12 +1004,12 @@ export default function Page() {
                       name="email"
                       placeholder="Enter your email"
                       required
-                      className="w-full sm:flex-1 h-[52px] px-5 text-[15px] font-medium text-gray-900 placeholder:text-gray-400 bg-white border border-[#E2E8F0] rounded-full focus:outline-none focus:ring-2 focus:ring-[#0F172A]/10 focus:border-[#0F172A] hover:border-gray-300 transition-all duration-200 shadow-sm"
+                      className="w-full sm:max-w-[400px] h-[52px] px-5 text-[15px] font-medium text-gray-900 placeholder:text-gray-400 bg-white border border-[#E2E8F0] rounded-full focus:outline-none focus:ring-2 focus:ring-[#0F172A]/10 focus:border-[#0F172A] hover:border-gray-300 transition-all duration-200 shadow-sm"
                       style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                     />
                     <button
                       type="submit"
-                      className="w-full sm:w-auto h-[52px] px-7 text-[15px] font-medium text-white bg-[#0F172A] hover:bg-[#1E293B] rounded-full transition-all duration-200 shadow-sm hover:shadow-md whitespace-nowrap"
+                      className="w-full sm:w-auto h-[52px] px-7 text-[15px] font-medium text-[#152D30] bg-[#E6FFD9] hover:bg-[#d4f0c4] rounded-full transition-all duration-200 shadow-sm hover:shadow-md whitespace-nowrap"
                       style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                     >
                       Get in touch
@@ -1021,16 +1021,16 @@ export default function Page() {
                 <div className="w-full max-w-[1100px] mx-auto" style={{ marginTop: '120px', marginBottom: '80px' }}>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-16 lg:gap-24">
 
-                    {/* Feature 1: 100% Automated */}
+                    {/* Feature 1: Always Listening */}
                     <div className="flex flex-col items-center md:items-start text-center md:text-left">
                       <div className="flex items-center gap-2 mb-3">
                         <svg className="w-5 h-5 text-[#733B3B] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style={{ strokeWidth: 2 }}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
-                        <h3 className="text-[0.95rem] font-semibold text-[#152D30]">100% Automated</h3>
+                        <h3 className="text-[0.95rem] font-semibold text-[#152D30]">Always Listening</h3>
                       </div>
                       <p className="text-[0.875rem] text-[#64748B]" style={{ lineHeight: '1.7' }}>
-                        Mira continuously analyzes customer conversations to detect emerging themes, pain points, and feature requests — no tagging or manual synthesis required.
+                        Every customer conversation holds a signal. Mira captures this by surfacing recurring themes, pain points, and feature requests as they emerge.
                       </p>
                     </div>
 
@@ -1043,20 +1043,20 @@ export default function Page() {
                         <h3 className="text-[0.95rem] font-semibold text-[#152D30]">Powered by NLP</h3>
                       </div>
                       <p className="text-[0.875rem] text-[#64748B]" style={{ lineHeight: '1.7' }}>
-                        Our models understand nuance and context, surfacing what customers actually mean across thousands of hours of calls and messages.
+                        Our models read between the lines. We uncover nuance and context to find the patterns behind thousands of hours of calls and unstructured data.
                       </p>
                     </div>
 
-                    {/* Feature 3: Secure and Private */}
+                    {/* Feature 3: Private by Design */}
                     <div className="flex flex-col items-center md:items-start text-center md:text-left">
                       <div className="flex items-center gap-2 mb-3">
                         <svg className="w-5 h-5 text-[#733B3B] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style={{ strokeWidth: 2 }}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
-                        <h3 className="text-[0.95rem] font-semibold text-[#152D30]">Secure and Private</h3>
+                        <h3 className="text-[0.95rem] font-semibold text-[#152D30]">Private by Design</h3>
                       </div>
                       <p className="text-[0.875rem] text-[#64748B]" style={{ lineHeight: '1.7' }}>
-                        Your data stays yours. Mira connects through secure APIs, never trains on your transcripts, and meets enterprise-grade privacy standards.
+                        Mira connects securely through APIs, doesn't train on your transcripts, and meets enterprise-grade privacy and security standards.
                       </p>
                     </div>
 
@@ -1753,44 +1753,93 @@ export default function Page() {
 
       </main>
 
-      <footer className="text-white py-8 sm:py-12" style={{ backgroundColor: '#1C3B3F' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="group cursor-pointer">
-            <svg
-              width="120"
-              height="120"
-              viewBox="0 0 32 32"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="transition-all duration-500 ease-out sm:w-[200px] sm:h-[200px]"
-              style={{ transform: `rotate(${logoRotation}deg)` }}
-            >
-              <g>
-                <circle cx="16" cy="4" r="2" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
-                <circle cx="16" cy="28" r="2" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
-                <circle cx="4" cy="16" r="2" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
-                <circle cx="28" cy="16" r="2" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
-                <rect x="15" y="15" width="2" height="2" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
-                <rect x="11" y="11" width="1" height="1" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
-                <rect x="20" y="11" width="1" height="1" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
-                <rect x="11" y="20" width="1" height="1" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
-                <rect x="20" y="20" width="1" height="1" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
-              </g>
-            </svg>
+      <footer className="text-white" style={{ backgroundColor: '#1C3B3F' }}>
+        <div className="max-w-7xl mx-auto px-8 sm:px-12">
+          {/* Top Section - Logo + Wordmark */}
+          <div className="flex flex-col sm:flex-row items-center sm:items-center justify-center sm:justify-start py-[44px] sm:py-[38px] opacity-0 animate-fadeIn" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
+            <div className="flex items-center gap-8 sm:gap-10">
+              <div
+                className="group cursor-pointer"
+                onMouseEnter={() => setLogoRotation(prev => prev + 90)}
+              >
+                <svg
+                  width="188"
+                  height="188"
+                  viewBox="0 0 32 32"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="transition-all duration-500 ease-out sm:w-[312px] sm:h-[312px]"
+                  style={{ transform: `rotate(${logoRotation}deg)` }}
+                >
+                  <g>
+                    <circle cx="16" cy="4" r="2" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
+                    <circle cx="16" cy="28" r="2" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
+                    <circle cx="4" cy="16" r="2" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
+                    <circle cx="28" cy="16" r="2" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
+                    <rect x="15" y="15" width="2" height="2" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
+                    <rect x="11" y="11" width="1" height="1" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
+                    <rect x="20" y="11" width="1" height="1" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
+                    <rect x="11" y="20" width="1" height="1" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
+                    <rect x="20" y="20" width="1" height="1" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
+                  </g>
+                </svg>
+              </div>
+              <h2 className="text-[188px] sm:text-[312px] tracking-[0.15em]" style={{ color: '#FFFFFF', fontFamily: 'Inter, sans-serif', fontWeight: 200, lineHeight: 1 }}>
+                Mira
+              </h2>
+            </div>
           </div>
-          <div className="flex flex-col gap-4 text-sm text-gray-400">
-            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 sm:gap-8 text-sm sm:text-base">
-              <Link href="#" className="hover:text-[#E6FFD9] transition-colors">Privacy Policy</Link>
-              <Link href="#" className="hover:text-[#E6FFD9] transition-colors">Terms of Service</Link>
-              <Link href="https://calendar.notion.so/meet/nkokal/0hq33q41" target="_blank" rel="noopener noreferrer" className="hover:text-[#E6FFD9] transition-colors">Contact</Link>
-              <Link href="https://www.linkedin.com/company/miragtm/?originalSubdomain=ca" target="_blank" rel="noopener noreferrer" className="hover:text-[#E6FFD9] transition-colors">
-                <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24">
+
+          {/* Divider */}
+          <div className="w-full h-px" style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}></div>
+
+          {/* Bottom Navigation Row */}
+          <div className="py-[30px] flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-8">
+            {/* Left - Copyright */}
+            <div className="text-sm order-2 sm:order-1" style={{ color: '#B3B6B5', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: '14px' }}>
+              © 2025 Mira Studios. All rights reserved.
+            </div>
+
+            {/* Center - Links */}
+            <div className="flex items-center gap-3 order-1 sm:order-2">
+              <Link
+                href="/ai-info"
+                className="text-sm transition-opacity hover:opacity-70"
+                style={{ color: '#E3E5E4', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: '14px' }}
+              >
+                Hey AI, learn about us
+              </Link>
+              <span style={{ color: '#E3E5E4', opacity: 0.5 }}>•</span>
+              <Link
+                href="#"
+                className="text-sm transition-opacity hover:opacity-70"
+                style={{ color: '#E3E5E4', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: '14px' }}
+              >
+                Terms
+              </Link>
+              <span style={{ color: '#E3E5E4', opacity: 0.5 }}>•</span>
+              <Link
+                href="#"
+                className="text-sm transition-opacity hover:opacity-70"
+                style={{ color: '#E3E5E4', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: '14px' }}
+              >
+                Privacy
+              </Link>
+            </div>
+
+            {/* Right - Social Icons */}
+            <div className="order-3">
+              <Link
+                href="https://www.linkedin.com/company/miragtm/?originalSubdomain=ca"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block transition-all duration-300 hover:opacity-100"
+                style={{ opacity: 0.6 }}
+              >
+                <svg className="w-6 h-6 transition-colors duration-300 hover:fill-[#E6FFD9]" fill="white" viewBox="0 0 24 24">
                   <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                 </svg>
               </Link>
-            </div>
-            <div className="text-center sm:text-right text-xs sm:text-sm">
-              © 2025 Mira Labs. Designed in Toronto, Canada 💚
             </div>
           </div>
         </div>
