@@ -1567,15 +1567,15 @@ export default function Page() {
               style={{ transform: `rotate(${logoRotation}deg)` }}
             >
               <g>
-                <circle cx="16" cy="4" r="2" fill="white" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
-                <circle cx="16" cy="28" r="2" fill="white" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
-                <circle cx="4" cy="16" r="2" fill="white" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
-                <circle cx="28" cy="16" r="2" fill="white" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
-                <rect x="15" y="15" width="2" height="2" fill="white" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
-                <rect x="11" y="11" width="1" height="1" fill="white" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
-                <rect x="20" y="11" width="1" height="1" fill="white" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
-                <rect x="11" y="20" width="1" height="1" fill="white" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
-                <rect x="20" y="20" width="1" height="1" fill="white" className="group-hover:fill-[#819F7D] transition-colors duration-300" />
+                <circle cx="16" cy="4" r="2" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
+                <circle cx="16" cy="28" r="2" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
+                <circle cx="4" cy="16" r="2" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
+                <circle cx="28" cy="16" r="2" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
+                <rect x="15" y="15" width="2" height="2" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
+                <rect x="11" y="11" width="1" height="1" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
+                <rect x="20" y="11" width="1" height="1" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
+                <rect x="11" y="20" width="1" height="1" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
+                <rect x="20" y="20" width="1" height="1" fill="white" className="group-hover:fill-[#E6FFD9] transition-colors duration-300" />
               </g>
             </svg>
           </div>
