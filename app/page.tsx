@@ -1796,8 +1796,8 @@ export default function Page() {
           {/* Bottom Navigation Row */}
           <div className="py-[30px] flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-8">
             {/* Left - Copyright */}
-            <div className="text-sm order-2 sm:order-1" style={{ color: '#B3B6B5', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: '14px' }}>
-              © 2025 Mira Studios. All rights reserved.
+            <div className="text-sm order-2 sm:order-1" style={{ color: '#E6FFD9', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: '14px' }}>
+              © 2025 Mira Labs. All rights reserved.
             </div>
 
             {/* Center - Links */}
@@ -1805,23 +1805,23 @@ export default function Page() {
               <Link
                 href="/ai-info"
                 className="text-sm transition-opacity hover:opacity-70"
-                style={{ color: '#E3E5E4', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: '14px' }}
+                style={{ color: '#E6FFD9', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: '14px' }}
               >
                 Hey AI, learn about us
               </Link>
-              <span style={{ color: '#E3E5E4', opacity: 0.5 }}>•</span>
+              <span style={{ color: '#E6FFD9', opacity: 0.5 }}>•</span>
               <Link
                 href="#"
                 className="text-sm transition-opacity hover:opacity-70"
-                style={{ color: '#E3E5E4', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: '14px' }}
+                style={{ color: '#E6FFD9', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: '14px' }}
               >
                 Terms
               </Link>
-              <span style={{ color: '#E3E5E4', opacity: 0.5 }}>•</span>
+              <span style={{ color: '#E6FFD9', opacity: 0.5 }}>•</span>
               <Link
                 href="#"
                 className="text-sm transition-opacity hover:opacity-70"
-                style={{ color: '#E3E5E4', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: '14px' }}
+                style={{ color: '#E6FFD9', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: '14px' }}
               >
                 Privacy
               </Link>
@@ -1836,7 +1836,7 @@ export default function Page() {
                 className="inline-block transition-all duration-300 hover:opacity-100"
                 style={{ opacity: 0.6 }}
               >
-                <svg className="w-6 h-6 transition-colors duration-300 hover:fill-[#E6FFD9]" fill="white" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 transition-colors duration-300" fill="#E6FFD9" viewBox="0 0 24 24">
                   <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                 </svg>
               </Link>
