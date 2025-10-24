@@ -513,6 +513,9 @@ function logoBlocks() {
 export default function Page() {
   const observerRef = useRef<IntersectionObserver | null>(null);
   const [logoRotation, setLogoRotation] = useState(0);
+  const [parallaxOffset, setParallaxOffset] = useState(0);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [hideHeader, setHideHeader] = useState(false);
 
   useEffect(() => {
     observerRef.current = new IntersectionObserver((entries) => {
@@ -568,6 +571,31 @@ export default function Page() {
     window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleParallaxScroll = () => {
+      const scrolled = window.scrollY;
+      const heroHeight = window.innerHeight;
+      // Create parallax effect with max 50px movement
+      const offset = Math.min(scrolled / heroHeight, 1) * 50;
+      setParallaxOffset(offset);
+
+      // Track scroll for header transparency/blur changes
+      setIsScrolled(scrolled > 20);
+
+      // Check if platform section is in view to hide header
+      const platformSection = document.getElementById('demo');
+      if (platformSection) {
+        const rect = platformSection.getBoundingClientRect();
+        // Hide header when platform section reaches the top of the viewport
+        setHideHeader(rect.top <= 80);
+      }
+    };
+
+    window.addEventListener('scroll', handleParallaxScroll, { passive: true });
+
+    return () => window.removeEventListener('scroll', handleParallaxScroll);
   }, []);
 
   return (
@@ -669,6 +697,157 @@ export default function Page() {
           z-index: 10;
         }
 
+        /* Hero Ambient Gradient Background - Decisionly Style */
+        .hero-gradient-bg {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+          z-index: 0;
+        }
+
+        /* Blob 1 - Soft Lavender (#EDE6F9) - Concentrated Upper Left */
+        .hero-gradient-bg::before {
+          content: '';
+          position: absolute;
+          top: 5%;
+          left: 5%;
+          width: 30%;
+          height: 35%;
+          background: #EDE6F9;
+          opacity: 0.5;
+          filter: blur(80px);
+          mix-blend-mode: soft-light;
+          animation: blobDrift1 45s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+          will-change: transform;
+          border-radius: 50%;
+        }
+
+        /* Blob 2 - Light Blush Pink (#F8E9F0) - Concentrated Upper Left */
+        .hero-gradient-bg::after {
+          content: '';
+          position: absolute;
+          top: 8%;
+          left: 8%;
+          width: 28%;
+          height: 32%;
+          background: #F8E9F0;
+          opacity: 0.45;
+          filter: blur(80px);
+          mix-blend-mode: soft-light;
+          animation: blobDrift2 45s cubic-bezier(0.4, 0, 0.2, 1) infinite reverse;
+          will-change: transform;
+          border-radius: 50%;
+        }
+
+        /* Blob 3 - Additional Lavender Layer - Concentrated Upper Left */
+        .hero-blob-3 {
+          position: absolute;
+          top: 3%;
+          left: 10%;
+          width: 26%;
+          height: 30%;
+          background: #EDE6F9;
+          opacity: 0.5;
+          filter: blur(80px);
+          mix-blend-mode: soft-light;
+          animation: blobDrift3 45s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+          will-change: transform;
+          pointer-events: none;
+          z-index: 1;
+          border-radius: 50%;
+        }
+
+        /* Smooth fade to white at bottom for seamless section transition */
+        .hero-fade-bottom {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 35%;
+          background: linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0) 70%,
+            #FFFFFF 100%
+          );
+          z-index: 2;
+          pointer-events: none;
+        }
+
+        /* Decisionly-style blob animations - slow, organic, continuous */
+        @keyframes blobDrift1 {
+          0% {
+            transform: translate3d(0%, 0%, 0) scale(1);
+          }
+          33% {
+            transform: translate3d(-3%, 5%, 0) scale(1.05);
+          }
+          66% {
+            transform: translate3d(4%, -3%, 0) scale(0.95);
+          }
+          100% {
+            transform: translate3d(0%, 0%, 0) scale(1);
+          }
+        }
+
+        @keyframes blobDrift2 {
+          0% {
+            transform: translate3d(0%, 0%, 0) scale(1);
+          }
+          30% {
+            transform: translate3d(5%, -4%, 0) scale(0.95);
+          }
+          70% {
+            transform: translate3d(-6%, 3%, 0) scale(1.05);
+          }
+          100% {
+            transform: translate3d(0%, 0%, 0) scale(1);
+          }
+        }
+
+        @keyframes blobDrift3 {
+          0% {
+            transform: translate3d(0%, 0%, 0) scale(1);
+          }
+          40% {
+            transform: translate3d(-4%, -5%, 0) scale(1.05);
+          }
+          80% {
+            transform: translate3d(6%, 4%, 0) scale(0.95);
+          }
+          100% {
+            transform: translate3d(0%, 0%, 0) scale(1);
+          }
+        }
+
+        /* Scroll parallax effect */
+        .hero-parallax {
+          will-change: transform;
+          transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* Responsive blob sizing for mobile */
+        @media (max-width: 768px) {
+          .hero-gradient-bg::before {
+            width: 70%;
+            height: 70%;
+            filter: blur(80px);
+          }
+          .hero-gradient-bg::after {
+            width: 60%;
+            height: 65%;
+            filter: blur(80px);
+          }
+          .hero-blob-3 {
+            width: 55%;
+            height: 60%;
+            filter: blur(80px);
+          }
+        }
+
         .chat-bubble {
           position: relative;
           background: #F3F4F6;
@@ -693,7 +872,15 @@ export default function Page() {
       `}</style>
 
       {/* Navigation */}
-      <header className="py-3 sm:py-4 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+      <header
+        className={`py-3 sm:py-4 sticky top-0 z-50 transition-all duration-300 bg-transparent ${
+          hideHeader ? 'opacity-0 pointer-events-none -translate-y-full' : 'opacity-100 translate-y-0'
+        }`}
+        style={{
+          borderBottom: 'none',
+          boxShadow: 'none'
+        }}
+      >
         <div className="max-w-6xl mx-auto flex items-center justify-between px-4">
           <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
             <svg width="120" height="40" viewBox="0 0 240 70" xmlns="http://www.w3.org/2000/svg" className="transition-colors duration-300 sm:w-[180px] sm:h-[52px]">
@@ -734,23 +921,34 @@ export default function Page() {
         </div>
       </header>
 
-      <main className="flex-grow">
-        {/* Hero Section */}
-        <section className="min-h-[85vh] sm:min-h-[90vh] flex items-center px-4 sm:px-8 py-12 sm:py-0 relative overflow-hidden bg-white">
+      <main className="flex-grow -mt-[72px] sm:-mt-[80px]">
+        {/* Hero Section - Decisionly-style soft lavender-pink gradient */}
+        <section className="min-h-[100vh] flex items-center px-4 sm:px-8 py-20 sm:py-24 relative overflow-hidden bg-white pt-[160px] sm:pt-[190px] pb-[115px] sm:pb-[140px]">
+          {/* Ambient Gradient Background - Soft lavender-pink blobs focused upper-left */}
+          <div
+            className="hero-gradient-bg hero-parallax"
+            style={{
+              transform: `translateY(${parallaxOffset}px)`
+            }}
+          />
+          {/* Additional blob for depth */}
+          <div className="hero-blob-3"></div>
+          {/* Bottom fade for smooth section transition */}
+          <div className="hero-fade-bottom"></div>
           <SubtleBackground />
-          <div className="max-w-6xl mx-auto text-center relative z-10">
-            <div className="space-y-4">
+          <div className="max-w-[960px] mx-auto text-center relative z-10 px-6">
+            <div className="space-y-8">
                 <div className="flex items-center justify-center">
                   <AnimatedPill />
                 </div>
-                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-normal tracking-tight text-gray-900 leading-[1.1] sm:leading-[0.9] font-playfair-display px-2">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-normal tracking-tight text-[#152D30] leading-[1.1] sm:leading-[0.9] font-playfair-display">
                   <TypewriterText />
                 </h1>
-                <p className="text-base sm:text-lg md:text-xl text-gray-600 leading-relaxed font-normal max-w-3xl mx-auto px-4">
+                <p className="text-base sm:text-lg md:text-xl text-[#475569] leading-relaxed font-normal max-w-[850px] mx-auto">
                   Mira learns across your sales stack by combining LLMs and domain-specific machine learning. Give your Rev Ops and Product teams the insights they need to grow revenue.
                 </p>
                 {/* Modern CTA Section */}
-                <div className="w-full max-w-[640px] mx-auto px-4 sm:px-6">
+                <div className="w-full max-w-[700px] mx-auto pt-4">
                   {/* Email Input + Button */}
                   <form
                     action="https://formspree.io/f/xldnavne"
@@ -820,44 +1018,44 @@ export default function Page() {
                 </div>
 
                 {/* Feature Highlights - Full Width */}
-                <div className="w-full max-w-[1400px] mx-auto px-8 lg:px-12" style={{ marginTop: '80px', marginBottom: '60px' }}>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-20">
+                <div className="w-full max-w-[1100px] mx-auto" style={{ marginTop: '120px', marginBottom: '80px' }}>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-16 lg:gap-24">
 
                     {/* Feature 1: 100% Automated */}
                     <div className="flex flex-col items-center md:items-start text-center md:text-left">
-                      <div className="flex items-center gap-2 mb-2">
-                        <svg className="w-5 h-5 text-[#5E1626] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style={{ strokeWidth: 2 }}>
+                      <div className="flex items-center gap-2 mb-3">
+                        <svg className="w-5 h-5 text-[#733B3B] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style={{ strokeWidth: 2 }}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
-                        <h3 className="text-[0.95rem] font-semibold text-[#0F172A]">100% Automated</h3>
+                        <h3 className="text-[0.95rem] font-semibold text-[#152D30]">100% Automated</h3>
                       </div>
-                      <p className="text-[0.875rem] text-[#475569]" style={{ lineHeight: '1.6' }}>
+                      <p className="text-[0.875rem] text-[#64748B]" style={{ lineHeight: '1.7' }}>
                         Mira continuously analyzes customer conversations to detect emerging themes, pain points, and feature requests — no tagging or manual synthesis required.
                       </p>
                     </div>
 
                     {/* Feature 2: Powered by NLP */}
                     <div className="flex flex-col items-center md:items-start text-center md:text-left">
-                      <div className="flex items-center gap-2 mb-2">
-                        <svg className="w-5 h-5 text-[#5E1626] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style={{ strokeWidth: 2 }}>
+                      <div className="flex items-center gap-2 mb-3">
+                        <svg className="w-5 h-5 text-[#733B3B] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style={{ strokeWidth: 2 }}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                         </svg>
-                        <h3 className="text-[0.95rem] font-semibold text-[#0F172A]">Powered by NLP</h3>
+                        <h3 className="text-[0.95rem] font-semibold text-[#152D30]">Powered by NLP</h3>
                       </div>
-                      <p className="text-[0.875rem] text-[#475569]" style={{ lineHeight: '1.6' }}>
+                      <p className="text-[0.875rem] text-[#64748B]" style={{ lineHeight: '1.7' }}>
                         Our models understand nuance and context, surfacing what customers actually mean across thousands of hours of calls and messages.
                       </p>
                     </div>
 
                     {/* Feature 3: Secure and Private */}
                     <div className="flex flex-col items-center md:items-start text-center md:text-left">
-                      <div className="flex items-center gap-2 mb-2">
-                        <svg className="w-5 h-5 text-[#5E1626] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style={{ strokeWidth: 2 }}>
+                      <div className="flex items-center gap-2 mb-3">
+                        <svg className="w-5 h-5 text-[#733B3B] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style={{ strokeWidth: 2 }}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
-                        <h3 className="text-[0.95rem] font-semibold text-[#0F172A]">Secure and Private</h3>
+                        <h3 className="text-[0.95rem] font-semibold text-[#152D30]">Secure and Private</h3>
                       </div>
-                      <p className="text-[0.875rem] text-[#475569]" style={{ lineHeight: '1.6' }}>
+                      <p className="text-[0.875rem] text-[#64748B]" style={{ lineHeight: '1.7' }}>
                         Your data stays yours. Mira connects through secure APIs, never trains on your transcripts, and meets enterprise-grade privacy standards.
                       </p>
                     </div>
